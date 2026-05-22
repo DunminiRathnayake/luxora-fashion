@@ -1,6 +1,7 @@
 import Hero from "../components/Hero";
 import FeaturedProducts from "../components/FeaturedProducts";
 import Collections from "../components/Collections";
+import BrandStory from "../components/BrandStory";
 
 function Home() {
   return (
@@ -8,6 +9,7 @@ function Home() {
       <Hero />
       <FeaturedProducts />
       <Collections />
+      <BrandStory />
     </div>
   );
 }
