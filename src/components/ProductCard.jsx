@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
+
 function ProductCard({ product }) {
   return (
-    <div className="group cursor-pointer">
+    <Link to={`/product/${product.id}`} className="block group cursor-pointer text-black no-underline">
 
       <div className="overflow-hidden">
         <img
@@ -20,7 +22,7 @@ function ProductCard({ product }) {
         </p>
       </div>
 
-    </div>
+    </Link>
   );
 }
 
