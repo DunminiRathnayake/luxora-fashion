@@ -1,7 +1,9 @@
+import Hero from "../components/Hero";
+
 function Home() {
   return (
-    <div className="p-10 text-3xl">
-      Home Page
+    <div>
+      <Hero />
     </div>
   );
 }
