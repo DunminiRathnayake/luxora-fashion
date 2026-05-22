@@ -4,10 +4,12 @@ import { products } from "../data/products";
 import ProductCard from "../components/ProductCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 function ProductDetails() {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
+  const { addToCart } = useCart();
 
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -68,6 +70,7 @@ function ProductDetails() {
       return;
     }
     setSizeError(false);
+    addToCart(product, selectedSize, quantity);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
