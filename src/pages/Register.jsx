@@ -1,22 +1,29 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, User, Mail, Lock, Check, ArrowRight } from "lucide-react";
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   const validate = () => {
     let formErrors = {};
+
+    if (!name.trim()) {
+      formErrors.name = "Full name is required";
+    }
 
     if (!email) {
       formErrors.email = "Email is required";
@@ -28,6 +35,12 @@ function Login() {
       formErrors.password = "Password is required";
     } else if (password.length < 6) {
       formErrors.password = "Password must be at least 6 characters";
+    }
+
+    if (!confirmPassword) {
+      formErrors.confirmPassword = "Please confirm your password";
+    } else if (password !== confirmPassword) {
+      formErrors.confirmPassword = "Passwords do not match";
     }
 
     setErrors(formErrors);
@@ -43,12 +56,12 @@ function Login() {
       // Simulate API verification
       setTimeout(() => {
         setIsSubmitting(false);
-        setLoginSuccess(true);
+        setRegisterSuccess(true);
         
         // Redirect after delay
         setTimeout(() => {
           navigate("/shop");
-        }, 1500);
+        }, 1800);
       }, 1500);
     }
   };
@@ -61,8 +74,8 @@ function Login() {
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.75 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80"
-          alt="LUXORA editorial"
+          src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80"
+          alt="LUXORA registration editorial"
           className="w-full h-full object-cover absolute inset-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30 flex flex-col justify-end p-8 lg:p-12 z-10">
@@ -72,7 +85,7 @@ function Login() {
             transition={{ delay: 0.3 }}
             className="text-[10px] tracking-widest uppercase text-neutral-400 font-semibold mb-1"
           >
-            The Art of Dress
+            Become a Member
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
@@ -80,7 +93,7 @@ function Login() {
             transition={{ delay: 0.4 }}
             className="text-2xl lg:text-3xl font-light text-white tracking-widest uppercase mb-2 lg:mb-4"
           >
-            LUXORA
+            JOIN THE CLUB
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 15 }}
@@ -88,13 +101,13 @@ function Login() {
             transition={{ delay: 0.5 }}
             className="text-neutral-350 font-light text-xs lg:text-sm leading-relaxed max-w-sm"
           >
-            Est. 2026. A statement of style, a legacy of craft. Discover curated luxury wardrobe essentials and exclusive privileges.
+            Unlock priority access to collections, complimentary styling consultations, and members-only luxury services.
           </motion.p>
         </div>
       </div>
 
       {/* Right Panel: Content form */}
-      <div className="flex-grow lg:col-span-7 flex items-center justify-center px-6 py-12 lg:py-20">
+      <div className="flex-grow lg:col-span-7 flex items-center justify-center px-6 py-12 lg:py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -102,7 +115,7 @@ function Login() {
           className="w-full max-w-md"
         >
           <AnimatePresence mode="wait">
-            {loginSuccess ? (
+            {registerSuccess ? (
               <motion.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -111,25 +124,52 @@ function Login() {
                 className="text-center py-8"
               >
                 <div className="w-12 h-12 bg-neutral-900 text-white rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
+                  <Check className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-light tracking-widest uppercase mb-3">Welcome Back</h3>
-                <p className="text-gray-500 font-light text-sm">Authenticating your profile. Preparing the collections...</p>
+                <h3 className="text-xl font-light tracking-widest uppercase mb-3">Profile Created</h3>
+                <p className="text-gray-500 font-light text-sm">Welcome to LUXORA, {name.split(" ")[0]}. Redirecting to collection shop...</p>
               </motion.div>
             ) : (
               <motion.div key="form">
                 <div className="mb-8">
                   <h1 className="text-2xl font-light tracking-widest uppercase text-neutral-900 mb-2">
-                    Sign In
+                    Create Profile
                   </h1>
                   <p className="text-neutral-500 font-light text-xs">
-                    Please log in using your account credentials.
+                    Please provide your information to set up your membership.
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Full Name */}
+                  <div className="relative">
+                    <label className="text-[10px] uppercase tracking-widest text-neutral-400 font-semibold block mb-1">
+                      Full Name
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-1 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => {
+                          setName(e.target.value);
+                          if (errors.name) setErrors((prev) => ({ ...prev, name: null }));
+                        }}
+                        className={`w-full pl-8 pr-3 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                          errors.name
+                            ? "border-red-400 focus:border-red-500"
+                            : "border-neutral-200 focus:border-black"
+                        }`}
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    {errors.name && (
+                      <span className="text-[10px] text-red-500 font-light mt-1 block">
+                        {errors.name}
+                      </span>
+                    )}
+                  </div>
+
                   {/* Email */}
                   <div className="relative">
                     <label className="text-[10px] uppercase tracking-widest text-neutral-400 font-semibold block mb-1">
@@ -161,18 +201,9 @@ function Login() {
 
                   {/* Password */}
                   <div className="relative">
-                    <div className="flex justify-between items-center mb-1">
-                      <label className="text-[10px] uppercase tracking-widest text-neutral-400 font-semibold block">
-                        Password
-                      </label>
-                      <button
-                        type="button"
-                        className="text-[10px] text-neutral-400 hover:text-black uppercase tracking-wider underline underline-offset-2 font-medium cursor-pointer"
-                        onClick={() => alert("Password reset workflow placeholder.")}
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
+                    <label className="text-[10px] uppercase tracking-widest text-neutral-400 font-semibold block mb-1">
+                      Password
+                    </label>
                     <div className="relative">
                       <Lock className="absolute left-1 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                       <input
@@ -187,7 +218,7 @@ function Login() {
                             ? "border-red-400 focus:border-red-500"
                             : "border-neutral-200 focus:border-black"
                         }`}
-                        placeholder="••••••••"
+                        placeholder="Min. 6 characters"
                       />
                       <button
                         type="button"
@@ -204,27 +235,49 @@ function Login() {
                     )}
                   </div>
 
-                  {/* Remember Me */}
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="remember-me"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-4 h-4 text-black border-neutral-300 rounded focus:ring-black accent-black cursor-pointer"
-                    />
-                    <label htmlFor="remember-me" className="ml-2 text-xs text-neutral-500 select-none cursor-pointer">
-                      Keep me signed in
+                  {/* Confirm Password */}
+                  <div className="relative">
+                    <label className="text-[10px] uppercase tracking-widest text-neutral-400 font-semibold block mb-1">
+                      Confirm Password
                     </label>
+                    <div className="relative">
+                      <Lock className="absolute left-1 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={(e) => {
+                          setConfirmPassword(e.target.value);
+                          if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: null }));
+                        }}
+                        className={`w-full pl-8 pr-10 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                          errors.confirmPassword
+                            ? "border-red-400 focus:border-red-500"
+                            : "border-neutral-200 focus:border-black"
+                        }`}
+                        placeholder="Re-type password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black cursor-pointer"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    {errors.confirmPassword && (
+                      <span className="text-[10px] text-red-500 font-light mt-1 block">
+                        {errors.confirmPassword}
+                      </span>
+                    )}
                   </div>
 
-                  {/* Sign In Button */}
+                  {/* Register Button */}
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 bg-black text-white text-xs uppercase tracking-widest font-semibold border border-black hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
+                    className="w-full py-4 bg-black text-white text-xs uppercase tracking-widest font-semibold border border-black hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50 mt-2"
                   >
-                    {isSubmitting ? "Signing In..." : "Sign In"}
+                    {isSubmitting ? "Creating Profile..." : "Create Account"}
                     {!isSubmitting && <ArrowRight className="w-3.5 h-3.5" />}
                   </button>
                 </form>
@@ -235,7 +288,7 @@ function Login() {
                     <div className="w-full border-t border-neutral-100"></div>
                   </div>
                   <span className="relative bg-white px-4 text-[10px] uppercase tracking-widest text-neutral-400">
-                    Or Continue With
+                    Or Register With
                   </span>
                 </div>
 
@@ -243,7 +296,7 @@ function Login() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => alert("Google sign-in workflow placeholder.")}
+                    onClick={() => alert("Google registration workflow placeholder.")}
                     className="flex items-center justify-center w-full py-3 border border-neutral-200 hover:border-black rounded-full text-xs uppercase tracking-wider font-semibold text-neutral-700 hover:text-black transition-all duration-300 cursor-pointer"
                   >
                     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
@@ -257,7 +310,7 @@ function Login() {
 
                   <button
                     type="button"
-                    onClick={() => alert("Apple sign-in workflow placeholder.")}
+                    onClick={() => alert("Apple registration workflow placeholder.")}
                     className="flex items-center justify-center w-full py-3 border border-neutral-200 hover:border-black rounded-full text-xs uppercase tracking-wider font-semibold text-neutral-700 hover:text-black transition-all duration-300 cursor-pointer"
                   >
                     <svg className="w-4 h-4 mr-2 fill-current" viewBox="0 0 24 24">
@@ -268,12 +321,12 @@ function Login() {
                 </div>
 
                 <div className="mt-8 text-center text-xs text-neutral-500 font-light">
-                  Don't have an account?{" "}
+                  Already have an account?{" "}
                   <Link
-                    to="/register"
+                    to="/login"
                     className="text-black font-semibold uppercase tracking-wider underline underline-offset-4 hover:text-neutral-700"
                   >
-                    Create Account
+                    Sign In
                   </Link>
                 </div>
               </motion.div>
@@ -285,4 +338,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
