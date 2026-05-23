@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { useWishlist } from "../context/WishlistContext";
+import { ShoppingBag, Heart, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Navbar() {
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -141,8 +143,39 @@ function Navbar() {
         </NavLink>
       </div>
 
-      {/* Right Actions: Bag & Mobile Menu Toggle */}
+      {/* Right Actions: Favorites, Bag & Mobile Menu Toggle */}
       <div className="flex gap-4 md:gap-6 items-center z-50">
+        
+        {/* Wishlist Link */}
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            `flex items-center gap-1.5 text-neutral-500 hover:text-black transition-colors no-underline relative py-2 text-xs uppercase tracking-widest font-medium ${
+              isActive ? "text-black font-semibold" : ""
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <Heart className={`w-4 h-4 ${isActive ? "fill-black text-black" : "text-neutral-800"}`} />
+              <span className="hidden sm:inline">Favorites</span>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-0.5 -right-2 bg-black text-white text-[8px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border border-white">
+                  {wishlistCount}
+                </span>
+              )}
+              {isActive && (
+                <motion.div
+                  layoutId="navUnderline"
+                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
+            </>
+          )}
+        </NavLink>
+
+        {/* Bag Link */}
         <NavLink
           to="/cart"
           className={({ isActive }) =>
@@ -216,6 +249,18 @@ function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Shop
+                </Link>
+              </motion.div>
+
+              <motion.div variants={linkItemVariants}>
+                <Link
+                  to="/wishlist"
+                  className={`no-underline hover:text-black hover:font-normal transition-all ${
+                    location.pathname === "/wishlist" ? "text-black font-medium underline underline-offset-8" : "text-neutral-500"
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Favorites ({wishlistCount})
                 </Link>
               </motion.div>
 
