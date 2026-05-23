@@ -1,48 +1,98 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
 function Collections() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const categoriesList = [
+    {
+      name: "Dresses",
+      image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80",
+      query: "Dresses",
+    },
+    {
+      name: "Essentials",
+      image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80",
+      query: "Tops",
+    },
+    {
+      name: "Evening Wear",
+      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
+      query: "Evening Wear",
+    },
+  ];
+
   return (
-    <section className="px-10 py-24 bg-[#f7f3ee]">
-      <div className="text-center mb-12">
-        <p className="uppercase tracking-[5px] text-sm text-gray-500">
-          Explore The Edit
-        </p>
-        <h2 className="text-5xl font-bold mt-4">
-          Curated Collections
-        </h2>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="relative h-[500px] overflow-hidden group">
-          <img
-            src="https://images.unsplash.com/photo-1496747611176-843222e1e57c"
-            alt="Dresses"
-            className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-end p-8">
-            <h3 className="text-white text-3xl font-semibold">Dresses</h3>
-          </div>
+    <section className="px-6 md:px-10 py-28 bg-[#fdfbf7]">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Section Title */}
+        <div className="text-center mb-16">
+          <p className="uppercase tracking-[8px] text-[10px] sm:text-xs text-neutral-400 font-semibold mb-3">
+            Explore The Edit
+          </p>
+          <h2 className="text-3xl md:text-4xl font-light uppercase tracking-widest text-neutral-900">
+            Curated Collections
+          </h2>
         </div>
 
-        <div className="relative h-[500px] overflow-hidden group">
-          <img
-            src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b"
-            alt="Essentials"
-            className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-end p-8">
-            <h3 className="text-white text-3xl font-semibold">Essentials</h3>
-          </div>
-        </div>
+        {/* Collection Cards Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
+          {categoriesList.map((category) => (
+            <motion.div key={category.name} variants={itemVariants}>
+              <Link
+                to={`/shop?category=${encodeURIComponent(category.query)}`}
+                className="relative block h-[500px] overflow-hidden group cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-500 rounded-sm"
+              >
+                {/* Background Image Scale Effect */}
+                <div className="absolute inset-0 w-full h-full overflow-hidden bg-neutral-900">
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  />
+                  {/* Subtle luxury editorial overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent transition-all duration-300" />
+                </div>
 
-        <div className="relative h-[500px] overflow-hidden group">
-          <img
-            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f"
-            alt="Evening Wear"
-            className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-end p-8">
-            <h3 className="text-white text-3xl font-semibold">Evening Wear</h3>
-          </div>
-        </div>
+                {/* Content Overlay */}
+                <div className="absolute inset-0 flex flex-col justify-end p-8 z-10">
+                  <span className="text-[10px] tracking-widest uppercase text-neutral-300 font-semibold mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Explore Drop
+                  </span>
+                  <h3 className="text-white text-2xl font-light uppercase tracking-wider">
+                    {category.name}
+                  </h3>
+                  <div className="w-10 h-[1px] bg-white mt-3 transform scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
+
       </div>
     </section>
   );
