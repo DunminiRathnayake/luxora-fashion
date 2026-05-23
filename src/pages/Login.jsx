@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { loginUser } = useCart();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +17,8 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+
+  const redirectPath = location.state?.from || "/shop";
 
   const validate = () => {
     let formErrors = {};
@@ -45,9 +50,17 @@ function Login() {
         setIsSubmitting(false);
         setLoginSuccess(true);
         
+        // Save temporary user info
+        loginUser({
+          name: "Dunmini Rathnayake",
+          email: email,
+          phone: "+94771234567",
+          address: "Negombo, Sri Lanka",
+        });
+        
         // Redirect after delay
         setTimeout(() => {
-          navigate("/shop");
+          navigate(redirectPath);
         }, 1500);
       }, 1500);
     }

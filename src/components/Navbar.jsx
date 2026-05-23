@@ -6,7 +6,7 @@ import { ShoppingBag, Heart, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Navbar() {
-  const { cartCount } = useCart();
+  const { cartCount, user, logoutUser } = useCart();
   const { wishlistCount } = useWishlist();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -122,25 +122,34 @@ function Navbar() {
           )}
         </NavLink>
 
-        <NavLink
-          to="/login"
-          className={`relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline ${
-            isAuthActive ? "text-black font-semibold" : ""
-          }`}
-        >
-          {({ isActive }) => (
-            <>
-              <span>Login</span>
-              {isAuthActive && (
-                <motion.div
-                  layoutId="navUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                />
-              )}
-            </>
-          )}
-        </NavLink>
+        {user ? (
+          <button
+            onClick={logoutUser}
+            className="relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline cursor-pointer uppercase tracking-widest font-medium bg-transparent border-0 outline-none"
+          >
+            Logout ({user.name.split(" ")[0]})
+          </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className={`relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline ${
+              isAuthActive ? "text-black font-semibold" : ""
+            }`}
+          >
+            {({ isActive }) => (
+              <>
+                <span>Login</span>
+                {isAuthActive && (
+                  <motion.div
+                    layoutId="navUnderline"
+                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+        )}
       </div>
 
       {/* Right Actions: Favorites, Bag & Mobile Menu Toggle */}
@@ -277,15 +286,27 @@ function Navbar() {
               </motion.div>
 
               <motion.div variants={linkItemVariants}>
-                <Link
-                  to="/login"
-                  className={`no-underline hover:text-black hover:font-normal transition-all ${
-                    isAuthActive ? "text-black font-medium underline underline-offset-8" : "text-neutral-500"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Login / Register
-                </Link>
+                {user ? (
+                  <button
+                    onClick={() => {
+                      logoutUser();
+                      setIsMenuOpen(false);
+                    }}
+                    className="no-underline text-neutral-500 hover:text-black hover:font-normal transition-all uppercase tracking-[4px] bg-transparent border-0 outline-none cursor-pointer"
+                  >
+                    Logout ({user.name.split(" ")[0]})
+                  </button>
+                ) : (
+                  <Link
+                    to="/login"
+                    className={`no-underline hover:text-black hover:font-normal transition-all ${
+                      isAuthActive ? "text-black font-medium underline underline-offset-8" : "text-neutral-500"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login / Register
+                  </Link>
+                )}
               </motion.div>
             </motion.div>
 

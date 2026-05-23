@@ -31,6 +31,25 @@ export const CartProvider = ({ children }) => {
     }
   });
 
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem("luxora_user");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const loginUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem("luxora_user", JSON.stringify(userData));
+  };
+
+  const logoutUser = () => {
+    setUser(null);
+    localStorage.removeItem("luxora_user");
+  };
+
   useEffect(() => {
     localStorage.setItem("luxora_cart", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -97,6 +116,9 @@ export const CartProvider = ({ children }) => {
         clearCart,
         cartCount,
         subtotal,
+        user,
+        loginUser,
+        logoutUser,
       }}
     >
       {children}

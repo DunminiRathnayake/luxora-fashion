@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, User, Mail, Lock, Check, ArrowRight } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { loginUser } = useCart();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,6 +20,8 @@ function Register() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
+
+  const redirectPath = location.state?.from || "/shop";
 
   const validate = () => {
     let formErrors = {};
@@ -58,9 +63,17 @@ function Register() {
         setIsSubmitting(false);
         setRegisterSuccess(true);
         
+        // Save user state in local storage & context
+        loginUser({
+          name: name,
+          email: email,
+          phone: "+94771234567",
+          address: "Negombo, Sri Lanka",
+        });
+        
         // Redirect after delay
         setTimeout(() => {
-          navigate("/shop");
+          navigate(redirectPath);
         }, 1800);
       }, 1500);
     }
