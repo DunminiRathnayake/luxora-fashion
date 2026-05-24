@@ -6,6 +6,8 @@ const mapProduct = (p) => {
   return {
     ...p,
     id: p._id || p.id,
+    image: p.image || (p.images && p.images[0]) || "",
+    price: typeof p.price === "number" ? `Rs. ${p.price.toLocaleString("en-IN")}` : p.price,
   };
 };
 

@@ -1,15 +1,70 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { products } from "../data/products";
+import { useProduct } from "../hooks/useProduct";
+import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
+import ProductSkeleton from "../components/ProductSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus, Heart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
+function ProductDetailsSkeleton() {
+  return (
+    <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16 animate-pulse">
+      <div className="max-w-7xl mx-auto px-6 md:px-10">
+        {/* Breadcrumbs Skeleton */}
+        <div className="h-4 bg-neutral-200 rounded w-1/4 mb-8 md:mb-12"></div>
+
+        {/* Product Workspace Split */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+          {/* Left Column: Image Skeleton */}
+          <div className="bg-neutral-100 aspect-[3/4] w-full rounded-sm"></div>
+
+          {/* Right Column: Info Skeleton */}
+          <div className="flex flex-col justify-center space-y-6">
+            <div className="h-4 bg-neutral-200 rounded w-1/6"></div>
+            <div className="h-10 bg-neutral-200 rounded w-3/4"></div>
+            <div className="h-6 bg-neutral-200 rounded w-1/4"></div>
+            <div className="h-8 bg-neutral-200 rounded-full w-1/2"></div>
+            
+            <div className="space-y-2">
+              <div className="h-3 bg-neutral-200 rounded w-full"></div>
+              <div className="h-3 bg-neutral-200 rounded w-full"></div>
+              <div className="h-3 bg-neutral-200 rounded w-2/3"></div>
+            </div>
+
+            <div className="border-t border-b border-neutral-100 py-6 space-y-6">
+              <div>
+                <div className="h-4 bg-neutral-200 rounded w-1/4 mb-3"></div>
+                <div className="flex gap-2.5">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="w-12 h-12 bg-neutral-200 rounded-full"></div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="h-4 bg-neutral-200 rounded w-1/4 mb-3"></div>
+                <div className="h-10 bg-neutral-200 rounded-full w-32"></div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="h-14 bg-neutral-200 rounded w-full"></div>
+              <div className="h-14 bg-neutral-200 rounded w-full"></div>
+              <div className="h-14 bg-neutral-200 rounded w-full"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProductDetails() {
   const { id } = useParams();
-  const product = products.find((p) => p.id === parseInt(id));
+  const { product, loading, error } = useProduct(id);
+  const { products: allProducts, loading: allLoading } = useProducts();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
@@ -28,6 +83,44 @@ function ProductDetails() {
     setIsAdded(false);
     setSizeError(false);
   }, [id]);
+
+  if (loading) {
+    return <ProductDetailsSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-2xl md:text-3xl font-light tracking-widest uppercase mb-4 text-black"
+        >
+          Connection Error
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-gray-500 font-light text-sm max-w-sm mb-8"
+        >
+          We are currently experiencing connection difficulties. Please check back later.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <button
+            onClick={() => window.location.reload()}
+            className="inline-block bg-black text-white text-xs uppercase tracking-widest px-8 py-3.5 hover:bg-neutral-800 transition-colors duration-300 font-medium cursor-pointer"
+          >
+            Retry Connection
+          </button>
+        </motion.div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -64,9 +157,9 @@ function ProductDetails() {
   }
 
   // Get 3 related products (excluding current)
-  const relatedProducts = products
-    .filter((p) => p.id !== product.id)
-    .slice(0, 3);
+  const relatedProducts = allProducts
+    ? allProducts.filter((p) => p.id !== product.id).slice(0, 3)
+    : [];
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -153,7 +246,7 @@ function ProductDetails() {
 
             {/* Editorial Description */}
             <p className="text-gray-600 font-light text-sm leading-relaxed mb-8">
-              Exquisitely tailored from premium materials, this piece defines modern luxury. Featuring a structured silhouette and exceptional drape, it offers a sophisticated profile for day-to-night styling. Designed with a focus on meticulous craftsmanship and timeless elegance.
+              {product.description || "Exquisitely tailored from premium materials, this piece defines modern luxury. Featuring a structured silhouette and exceptional drape, it offers a sophisticated profile for day-to-night styling. Designed with a focus on meticulous craftsmanship and timeless elegance."}
             </p>
 
             <div className="border-t border-b border-neutral-100 py-6 mb-8">
@@ -170,7 +263,7 @@ function ProductDetails() {
                   )}
                 </div>
                 <div className="flex gap-2.5">
-                  {["XS", "S", "M", "L", "XL"].map((size) => {
+                  {(product.sizes || ["XS", "S", "M", "L", "XL"]).map((size) => {
                     const isSelected = selectedSize === size;
                     return (
                       <button
@@ -286,7 +379,18 @@ function ProductDetails() {
         </div>
 
         {/* You May Also Like Section */}
-        {relatedProducts.length > 0 && (
+        {allLoading ? (
+          <div className="mt-24 pt-16 border-t border-neutral-100">
+            <h2 className="text-xl md:text-2xl font-light tracking-widest text-center uppercase mb-12">
+              You May Also Like
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <ProductSkeleton />
+              <ProductSkeleton />
+              <ProductSkeleton />
+            </div>
+          </div>
+        ) : relatedProducts.length > 0 ? (
           <div className="mt-24 pt-16 border-t border-neutral-100">
             <h2 className="text-xl md:text-2xl font-light tracking-widest text-center uppercase mb-12">
               You May Also Like
@@ -321,7 +425,7 @@ function ProductDetails() {
               ))}
             </motion.div>
           </div>
-        )}
+        ) : null}
 
       </div>
     </div>
