@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
-import { products } from "../data/products";
 import ProductCard from "./ProductCard";
+import ProductSkeleton from "./ProductSkeleton";
+import { useProducts } from "../hooks/useProducts";
 import { motion } from "framer-motion";
 
 function FeaturedProducts() {
-  // Balanced showcase of 3 products (forms a clean 3-column grid row)
-  const featured = products.slice(0, 3);
+  const { products, loading, error } = useProducts();
+
+  // Filter products by featured flag, default to slicing first 3 if none flagged
+  const featured = products.filter((p) => p.featured).slice(0, 3);
+  const displayProducts = featured.length > 0 ? featured : products.slice(0, 3);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -49,20 +53,37 @@ function FeaturedProducts() {
           </Link>
         </div>
 
-        {/* Staggered Cards Entry Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          {featured.map((product) => (
-            <motion.div key={product.id} variants={cardVariants}>
-              <ProductCard product={product} />
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* Dynamic Display Area */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+          </div>
+        ) : error ? (
+          <div className="text-center py-12 bg-neutral-50 rounded-sm border border-neutral-100">
+            <span className="text-[10px] tracking-[4px] uppercase text-neutral-400 font-semibold block mb-2">
+              Connection Offline
+            </span>
+            <p className="text-xs text-neutral-500 font-light max-w-xs mx-auto">
+              Our servers are currently resting. Please refresh or verify network access.
+            </p>
+          </div>
+        ) : (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {displayProducts.map((product) => (
+              <motion.div key={product.id} variants={cardVariants}>
+                <ProductCard product={product} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
 
       </div>
     </section>

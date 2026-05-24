@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { products } from "../data/products";
 import ProductCard from "../components/ProductCard";
+import ProductSkeleton from "../components/ProductSkeleton";
+import { useProducts } from "../hooks/useProducts";
 import { Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Shop() {
+  const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -97,9 +99,30 @@ function Shop() {
         </div>
       </div>
 
-      {/* Product Grid with layout animations */}
+      {/* Product Grid with dynamic state wrapper */}
       <div className="max-w-7xl mx-auto px-6">
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <ProductSkeleton key={index} />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="py-20 text-center border border-dashed border-neutral-200 rounded-sm max-w-md mx-auto">
+            <span className="text-[10px] tracking-[4px] uppercase text-neutral-400 font-semibold block mb-2">
+              Collection Unreachable
+            </span>
+            <p className="text-neutral-500 font-light text-xs sm:text-sm leading-relaxed mb-6 max-w-xs mx-auto">
+              We are currently unable to retrieve our catalogue. The connection to the server failed.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-black text-white text-[10px] uppercase tracking-widest px-6 py-2.5 hover:bg-neutral-800 transition-colors font-medium cursor-pointer"
+            >
+              Retry Connection
+            </button>
+          </div>
+        ) : filteredProducts.length > 0 ? (
           <motion.div
             layout
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12"
