@@ -20,6 +20,8 @@ import ProtectedAdminRoute from "./admin/routes/ProtectedAdminRoute";
 import AdminLayout from "./admin/layouts/AdminLayout";
 import AdminDashboard from "./admin/pages/AdminDashboard";
 import AdminProducts from "./admin/pages/AdminProducts";
+import AdminAddProduct from "./admin/pages/AdminAddProduct";
+import AdminEditProduct from "./admin/pages/AdminEditProduct";
 import AdminOrders from "./admin/pages/AdminOrders";
 import AdminCustomers from "./admin/pages/AdminCustomers";
 import AdminAnalytics from "./admin/pages/AdminAnalytics";
@@ -57,6 +59,8 @@ function AppContent() {
             >
               <Route index element={<AdminDashboard />} />
               <Route path="products" element={<AdminProducts />} />
+              <Route path="products/new" element={<AdminAddProduct />} />
+              <Route path="products/edit/:id" element={<AdminEditProduct />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="analytics" element={<AdminAnalytics />} />
