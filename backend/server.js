@@ -1,8 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -16,6 +18,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve uploaded files statically
+const uploadPath = path.join(process.cwd(), "backend", "uploads");
+app.use("/uploads", express.static(uploadPath));
+
 // API Status Diagnostics Route
 app.get("/", (req, res) => {
   res.send("Luxora API Running");
@@ -23,6 +29,7 @@ app.get("/", (req, res) => {
 
 // Bind routing modules
 app.use("/api/products", productRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Unmatched routes fallback
 app.use(notFound);

@@ -14,17 +14,29 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import PageTransition from "./components/PageTransition";
 
+// Admin System Imports
+import AdminLogin from "./admin/pages/AdminLogin";
+import ProtectedAdminRoute from "./admin/routes/ProtectedAdminRoute";
+import AdminLayout from "./admin/layouts/AdminLayout";
+import AdminDashboard from "./admin/pages/AdminDashboard";
+import AdminProducts from "./admin/pages/AdminProducts";
+import AdminOrders from "./admin/pages/AdminOrders";
+import AdminCustomers from "./admin/pages/AdminCustomers";
+import AdminAnalytics from "./admin/pages/AdminAnalytics";
+
 function AppContent() {
   const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-black font-sans antialiased">
       <ScrollToTop />
-      <Navbar />
+      {!isAdminRoute && <Navbar />}
 
       <main className="flex-grow flex flex-col">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
+            {/* Customer Facing Routes */}
             <Route path="/" element={<PageTransition><Home /></PageTransition>} />
             <Route path="/shop" element={<PageTransition><Shop /></PageTransition>} />
             <Route path="/product/:id" element={<PageTransition><ProductDetails /></PageTransition>} />
@@ -32,11 +44,28 @@ function AppContent() {
             <Route path="/wishlist" element={<PageTransition><Wishlist /></PageTransition>} />
             <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
             <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+
+            {/* Admin Portal Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedAdminRoute>
+                  <AdminLayout />
+                </ProtectedAdminRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="customers" element={<AdminCustomers />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+            </Route>
           </Routes>
         </AnimatePresence>
       </main>
 
-      <Footer />
+      {!isAdminRoute && <Footer />}
     </div>
   );
 }
