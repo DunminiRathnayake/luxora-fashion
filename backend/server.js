@@ -5,6 +5,7 @@ import path from "path";
 import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 // Bind routing modules
 app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Unmatched routes fallback
 app.use(notFound);
