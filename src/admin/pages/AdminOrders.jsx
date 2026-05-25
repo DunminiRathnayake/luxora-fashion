@@ -1,17 +1,62 @@
-import { Search, Eye, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { useOrders } from "../hooks/useOrders";
+import { formatPrice } from "../../context/CartContext";
+import { Search, Eye, Trash2, ExternalLink, Calendar, Mail, Phone, MapPin, AlertCircle, ShoppingBag } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function AdminOrders() {
-  const orders = [
-    { id: "LX-9082", customer: "Sophia Sterling", items: "Midnight Satin Dress (S) x1", status: "Completed", amount: "Rs. 8,500", date: "May 24, 2026", whatsapp: "+94770000000" },
-    { id: "LX-9081", customer: "Julian Mercer", items: "Classic Black Blazer (M) x1", status: "In Route", amount: "Rs. 12,000", date: "May 23, 2026", whatsapp: "+94770000001" },
-    { id: "LX-9080", customer: "Clara Hawthorne", items: "Elegant White Top (XS) x2", status: "Processing", amount: "Rs. 8,400", date: "May 22, 2026", whatsapp: "+94770000002" },
-    { id: "LX-9079", customer: "Oliver Vance", items: "Chiffon Maxi Dress (L) x1", status: "Completed", amount: "Rs. 9,800", date: "May 21, 2026", whatsapp: "+94770000003" },
-    { id: "LX-9078", customer: "Emily Vance", items: "Camel Tailored Blazer (S) x1", status: "Pending WhatsApp", amount: "Rs. 13,500", date: "May 20, 2026", whatsapp: "+94770000004" },
-  ];
+  const { orders, loading, error, updateStatus, removeOrder } = useOrders();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  
+  // Status update states
+  const [updatingId, setUpdatingId] = useState(null);
+  const [errorId, setErrorId] = useState(null);
+  const [actionError, setActionError] = useState("");
+
+  const statuses = ["Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled"];
+
+  const handleStatusChange = async (id, newStatus) => {
+    setUpdatingId(id);
+    setErrorId(null);
+    setActionError("");
+
+    try {
+      await updateStatus(id, newStatus);
+    } catch (err) {
+      setErrorId(id);
+      setActionError(err.message || "Failed to update order status.");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Are you sure you want to permanently delete this order inquiry?");
+    if (!confirm) return;
+
+    try {
+      await removeOrder(id);
+    } catch (err) {
+      alert(err.message || "Failed to delete order.");
+    }
+  };
+
+  // Filtration logic
+  const filteredOrders = orders.filter((o) => {
+    const matchesSearch =
+      o.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      o.customerEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (o._id || o.id).toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus = statusFilter === "All" || o.orderStatus === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="space-y-8">
-      {/* Title Block */}
+      {/* Page Header */}
       <div className="flex justify-between items-center pb-6 border-b border-neutral-900">
         <div>
           <span className="text-[10px] tracking-[4px] uppercase text-neutral-500 font-semibold block mb-1">
@@ -23,75 +68,178 @@ function AdminOrders() {
         </div>
       </div>
 
-      {/* Control Bar */}
-      <div className="flex items-center bg-[#111] border border-neutral-900 px-4 py-3 max-w-md rounded-full">
-        <Search className="w-4.5 h-4.5 text-neutral-500 mr-2.5" />
-        <input
-          type="text"
-          placeholder="Filter orders by ID or customer..."
-          className="bg-transparent text-sm text-white focus:outline-none w-full font-light"
-          disabled
-        />
+      {/* Filter and Control Bars */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        
+        {/* Search */}
+        <div className="flex items-center bg-[#111] border border-neutral-900 px-4 py-3 w-full md:w-80 rounded-full">
+          <Search className="w-4 h-4 text-neutral-500 mr-2.5" />
+          <input
+            type="text"
+            placeholder="Search by ID or customer..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-transparent text-xs text-white focus:outline-none w-full font-light"
+          />
+        </div>
+
+        {/* Status Filter Pills */}
+        <div className="flex flex-wrap gap-2">
+          {["All", ...statuses].map((status) => {
+            const isActive = statusFilter === status;
+            return (
+              <button
+                key={status}
+                onClick={() => setStatusFilter(status)}
+                className={`px-4 py-2 text-[10px] uppercase tracking-wider font-medium transition-all duration-300 border rounded-full cursor-pointer ${
+                  isActive
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-neutral-500 border-neutral-900 hover:text-white hover:border-neutral-700"
+                }`}
+              >
+                {status}
+              </button>
+            );
+          })}
+        </div>
+
       </div>
 
-      {/* Table */}
-      <div className="bg-[#111] border border-neutral-900 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-neutral-900 text-[10px] uppercase tracking-wider text-neutral-500 font-semibold bg-[#161616]/40">
-                <th className="px-6 py-4.5">Order ID</th>
-                <th className="px-6 py-4.5">Date</th>
-                <th className="px-6 py-4.5">Customer</th>
-                <th className="px-6 py-4.5">Items Ordered</th>
-                <th className="px-6 py-4.5">Total Bill</th>
-                <th className="px-6 py-4.5">Workflow Status</th>
-                <th className="px-6 py-4.5 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-neutral-900 text-xs font-light text-neutral-300">
-              {orders.map((o) => (
-                <tr key={o.id} className="hover:bg-neutral-900/30 transition-colors group">
-                  <td className="px-6 py-4.5 font-mono text-neutral-200">{o.id}</td>
-                  <td className="px-6 py-4.5 text-neutral-400">{o.date}</td>
-                  <td className="px-6 py-4.5">
-                    <div>
-                      <div className="font-medium text-neutral-200">{o.customer}</div>
-                      <div className="text-[10px] text-neutral-500">{o.whatsapp}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4.5 text-neutral-300 truncate max-w-[200px]" title={o.items}>{o.items}</td>
-                  <td className="px-6 py-4.5 text-neutral-200 font-medium">{o.amount}</td>
-                  <td className="px-6 py-4.5">
-                    <span className={`px-2.5 py-1 text-[9px] uppercase tracking-wider font-semibold rounded-full border ${
-                      o.status === "Completed"
-                        ? "bg-green-950/20 text-green-400 border-green-900/40"
-                        : o.status === "Processing" || o.status === "In Route"
-                        ? "bg-neutral-800/40 text-neutral-400 border-neutral-800"
-                        : "bg-amber-950/20 text-amber-400 border-amber-900/40"
-                    }`}>
-                      {o.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4.5 text-right">
-                    <div className="flex justify-end gap-2">
-                      <button
-                        onClick={() => window.open(`https://wa.me/${o.whatsapp.replace("+", "")}`, "_blank")}
-                        title="Chat on WhatsApp"
-                        className="p-2 text-neutral-500 hover:text-green-400 hover:bg-green-950/20 rounded transition-all cursor-pointer inline-flex"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 text-neutral-500 hover:text-white hover:bg-neutral-900 rounded transition-all cursor-pointer inline-flex">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+      {/* Orders Directory Table */}
+      <div className="bg-[#111] border border-neutral-900 overflow-hidden relative">
+        {loading && orders.length === 0 ? (
+          <div className="py-20 text-center text-neutral-500 uppercase tracking-widest text-[10px] animate-pulse">
+            Retrieving orders log...
+          </div>
+        ) : error ? (
+          <div className="py-20 text-center text-red-400 uppercase tracking-widest text-[10px] px-6">
+            <AlertCircle className="w-6 h-6 mx-auto mb-2 opacity-80" />
+            {error}
+          </div>
+        ) : filteredOrders.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-neutral-900 text-[10px] uppercase tracking-wider text-neutral-500 font-semibold bg-[#161616]/40">
+                  <th className="px-6 py-4.5">Order Info</th>
+                  <th className="px-6 py-4.5">Client Details</th>
+                  <th className="px-6 py-4.5">Products Summary</th>
+                  <th className="px-6 py-4.5">Bill</th>
+                  <th className="px-6 py-4.5">Fulfillment Status</th>
+                  <th className="px-6 py-4.5 text-right">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-neutral-900 text-xs font-light text-neutral-300">
+                {filteredOrders.map((o) => {
+                  const formattedDate = new Date(o.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  });
+
+                  const isUpdating = updatingId === (o._id || o.id);
+                  const isError = errorId === (o._id || o.id);
+
+                  return (
+                    <tr key={o._id || o.id} className="hover:bg-neutral-900/30 transition-colors group">
+                      
+                      {/* ID and Date */}
+                      <td className="px-6 py-4.5">
+                        <div className="font-mono text-neutral-200 font-medium">{(o._id || o.id).substring(0, 8)}...</div>
+                        <div className="text-[10px] text-neutral-500 flex items-center gap-1 mt-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>{formattedDate}</span>
+                        </div>
+                      </td>
+
+                      {/* Customer Info */}
+                      <td className="px-6 py-4.5">
+                        <div className="font-medium text-neutral-200">{o.customerName}</div>
+                        <div className="text-[10px] text-neutral-500 flex flex-col gap-0.5 mt-1 font-light">
+                          <span className="flex items-center gap-1"><Mail className="w-2.5 h-2.5" /> {o.customerEmail}</span>
+                          <span className="flex items-center gap-1"><Phone className="w-2.5 h-2.5" /> {o.customerPhone}</span>
+                        </div>
+                      </td>
+
+                      {/* Items summaries */}
+                      <td className="px-6 py-4.5 text-neutral-400">
+                        <div className="max-w-[200px] space-y-1">
+                          {o.orderItems.map((item, idx) => (
+                            <div key={idx} className="truncate" title={`${item.name} (Size: ${item.size}, Qty: ${item.quantity})`}>
+                              <span className="text-neutral-300 font-semibold">{item.quantity}x</span> {item.name} <span className="text-neutral-500 font-mono font-medium uppercase text-[9px] bg-neutral-900 border border-neutral-850 px-1 py-0.5 rounded">{item.size}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </td>
+
+                      {/* Total bill */}
+                      <td className="px-6 py-4.5">
+                        <span className="text-neutral-200 font-semibold">{formatPrice(o.totalAmount)}</span>
+                      </td>
+
+                      {/* Status Dropdowns updates */}
+                      <td className="px-6 py-4.5">
+                        <div className="flex flex-col gap-1.5">
+                          <select
+                            disabled={isUpdating}
+                            value={o.orderStatus}
+                            onChange={(e) => handleStatusChange(o._id || o.id, e.target.value)}
+                            className="bg-[#181818] border border-neutral-800 text-[10px] uppercase tracking-wider font-semibold text-white px-2 py-1.5 focus:outline-none focus:border-white transition-colors cursor-pointer rounded-sm"
+                          >
+                            {statuses.map((status) => (
+                              <option key={status} value={status} className="bg-[#111] text-white">
+                                {status}
+                              </option>
+                            ))}
+                          </select>
+                          
+                          {isError && (
+                            <span className="text-[9px] text-red-400 block max-w-[120px] leading-tight">
+                              {actionError}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-6 py-4.5 text-right">
+                        <div className="flex justify-end gap-2">
+                          {/* WhatsApp Chat link */}
+                          <button
+                            onClick={() => window.open(`https://wa.me/${o.customerPhone.replace(/[^0-9]/g, "")}`, "_blank")}
+                            title="Chat on WhatsApp"
+                            className="p-2.5 text-neutral-500 hover:text-green-400 hover:bg-green-950/20 rounded transition-all cursor-pointer inline-flex border border-transparent"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </button>
+                          
+                          {/* Delete order */}
+                          <button
+                            onClick={() => handleDelete(o._id || o.id)}
+                            title="Delete Inquiry"
+                            className="p-2.5 text-neutral-500 hover:text-red-400 hover:bg-red-950/20 rounded transition-all cursor-pointer inline-flex border border-transparent"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="py-24 text-center">
+            <span className="text-[10px] tracking-[4px] uppercase text-neutral-500 font-semibold block mb-2">
+              No orders
+            </span>
+            <p className="text-xs text-neutral-500 font-light max-w-xs mx-auto">
+              No orders matched your active criteria.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

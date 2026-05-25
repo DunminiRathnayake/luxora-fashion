@@ -123,12 +123,35 @@ function Navbar() {
         </NavLink>
 
         {user ? (
-          <button
-            onClick={logoutUser}
-            className="relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline cursor-pointer uppercase tracking-widest font-medium bg-transparent border-0 outline-none"
-          >
-            Logout ({user.name.split(" ")[0]})
-          </button>
+          <div className="flex gap-6 items-center">
+            <NavLink
+              to="/profile/orders"
+              className={({ isActive }) =>
+                `relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline ${
+                  isActive ? "text-black font-semibold" : ""
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <span>Orders</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="navUnderline"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </>
+              )}
+            </NavLink>
+            <button
+              onClick={logoutUser}
+              className="relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline cursor-pointer uppercase tracking-widest font-medium bg-transparent border-0 outline-none"
+            >
+              Logout ({user.name.split(" ")[0]})
+            </button>
+          </div>
         ) : (
           <NavLink
             to="/login"
@@ -284,6 +307,20 @@ function Navbar() {
                   Shopping Bag ({cartCount})
                 </Link>
               </motion.div>
+
+              {user && (
+                <motion.div variants={linkItemVariants}>
+                  <Link
+                    to="/profile/orders"
+                    className={`no-underline hover:text-black hover:font-normal transition-all ${
+                      location.pathname === "/profile/orders" ? "text-black font-medium underline underline-offset-8" : "text-neutral-500"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Orders
+                  </Link>
+                </motion.div>
+              )}
 
               <motion.div variants={linkItemVariants}>
                 {user ? (

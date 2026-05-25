@@ -8,6 +8,7 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Wishlist from "./pages/Wishlist";
+import ProfileOrders from "./pages/ProfileOrders";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -46,6 +47,7 @@ function AppContent() {
             <Route path="/wishlist" element={<PageTransition><Wishlist /></PageTransition>} />
             <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
             <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+            <Route path="/profile/orders" element={<PageTransition><ProfileOrders /></PageTransition>} />
 
             {/* Admin Portal Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
