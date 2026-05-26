@@ -14,6 +14,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import PageTransition from "./components/PageTransition";
+import MiniCartDrawer, { CartToast } from "./components/MiniCartDrawer";
 
 // Admin System Imports
 import AdminLogin from "./admin/pages/AdminLogin";
@@ -72,6 +73,8 @@ function AppContent() {
       </main>
 
       {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <MiniCartDrawer />}
+      {!isAdminRoute && <CartToast />}
     </div>
   );
 }

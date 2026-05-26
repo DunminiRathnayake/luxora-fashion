@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { useCartDrawer } from "../context/CartDrawerContext";
 import { ShoppingBag, Heart, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Navbar() {
   const { cartCount, user, logoutUser } = useCart();
+  const { openCart, bounceCartIcon } = useCartDrawer();
   const { wishlistCount } = useWishlist();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -207,34 +209,37 @@ function Navbar() {
           )}
         </NavLink>
 
-        {/* Bag Link */}
-        <NavLink
-          to="/cart"
-          className={({ isActive }) =>
-            `flex items-center gap-1.5 text-neutral-500 hover:text-black transition-colors no-underline relative py-2 text-xs uppercase tracking-widest font-medium ${
-              isActive ? "text-black font-semibold" : ""
-            }`
-          }
+        {/* Bag Trigger Button */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            openCart();
+          }}
+          className={`flex items-center gap-1.5 text-neutral-500 hover:text-black transition-colors no-underline relative py-2 text-xs uppercase tracking-widest font-medium bg-transparent border-0 outline-none cursor-pointer ${
+            location.pathname === "/cart" ? "text-black font-semibold" : ""
+          }`}
         >
-          {({ isActive }) => (
-            <>
-              <ShoppingBag className="w-4 h-4 text-neutral-800" />
-              <span className="hidden sm:inline">Bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-2 bg-black text-white text-[8px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border border-white">
-                  {cartCount}
-                </span>
-              )}
-              {isActive && (
-                <motion.div
-                  layoutId="navUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                />
-              )}
-            </>
+          <motion.div
+            animate={bounceCartIcon ? { scale: [1, 1.4, 0.9, 1.15, 1] } : { scale: 1 }}
+            transition={{ duration: 0.55 }}
+            className="relative"
+          >
+            <ShoppingBag className="w-4 h-4 text-neutral-800" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1.5 bg-black text-white text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-white">
+                {cartCount}
+              </span>
+            )}
+          </motion.div>
+          <span className="hidden sm:inline">Bag</span>
+          {location.pathname === "/cart" && (
+            <motion.div
+              layoutId="navUnderline"
+              className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+              transition={{ type: "spring", stiffness: 350, damping: 30 }}
+            />
           )}
-        </NavLink>
+        </button>
 
         {/* Mobile Menu Button */}
         <button
@@ -297,15 +302,17 @@ function Navbar() {
               </motion.div>
 
               <motion.div variants={linkItemVariants}>
-                <Link
-                  to="/cart"
-                  className={`no-underline hover:text-black hover:font-normal transition-all ${
-                    location.pathname === "/cart" ? "text-black font-medium underline underline-offset-8" : "text-neutral-500"
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    openCart();
+                  }}
+                  className={`no-underline hover:text-black hover:font-normal transition-all uppercase tracking-[4px] bg-transparent border-0 outline-none cursor-pointer ${
+                    location.pathname === "/cart" ? "text-black font-semibold underline underline-offset-8" : "text-neutral-500"
                   }`}
-                  onClick={() => setIsMenuOpen(false)}
                 >
                   Shopping Bag ({cartCount})
-                </Link>
+                </button>
               </motion.div>
 
               {user && (
