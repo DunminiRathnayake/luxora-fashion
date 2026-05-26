@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { logoutAdmin } from "../services/adminAuthService";
+import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -22,6 +22,7 @@ function AdminLayout() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const menuItems = [
     { name: "Dashboard", path: "/admin", icon: LayoutDashboard },
@@ -32,7 +33,7 @@ function AdminLayout() {
   ];
 
   const handleLogout = () => {
-    logoutAdmin();
+    logout();
     navigate("/admin/login");
   };
 
@@ -265,7 +266,7 @@ function AdminLayout() {
                 <User className="w-3.5 h-3.5 text-neutral-400" />
               </div>
               <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-light hidden sm:inline">
-                Admin Curator
+                {user?.name || "Admin Curator"}
               </span>
             </div>
           </div>

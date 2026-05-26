@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, User, Mail, Lock, Check, ArrowRight } from "lucide-react";
-import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 function Register() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { loginUser } = useCart();
+  const { register } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
 
-  const redirectPath = location.state?.from || "/shop";
+  const redirectPath = location.state?.from?.pathname || location.state?.from || "/shop";
 
   const validate = () => {
     let formErrors = {};
@@ -52,30 +52,26 @@ function Register() {
     return Object.keys(formErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validate()) {
       setIsSubmitting(true);
-      
-      // Simulate API verification
-      setTimeout(() => {
+      setErrors({});
+
+      try {
+        await register(name, email, password);
         setIsSubmitting(false);
         setRegisterSuccess(true);
-        
-        // Save user state in local storage & context
-        loginUser({
-          name: name,
-          email: email,
-          phone: "+94771234567",
-          address: "Negombo, Sri Lanka",
-        });
         
         // Redirect after delay
         setTimeout(() => {
           navigate(redirectPath);
         }, 1800);
-      }, 1500);
+      } catch (err) {
+        setIsSubmitting(false);
+        setErrors({ server: err.message || "Registration failed. Please try again." });
+      }
     }
   };
 
@@ -151,6 +147,11 @@ function Register() {
                   <p className="text-neutral-500 font-light text-xs">
                     Please provide your information to set up your membership.
                   </p>
+                  {errors.server && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs font-light tracking-wide rounded-md animate-fade-in">
+                      {errors.server}
+                    </div>
+                  )}
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">

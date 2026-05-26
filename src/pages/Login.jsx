@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
-import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { loginUser } = useCart();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
-  const redirectPath = location.state?.from || "/shop";
+  const redirectPath = location.state?.from?.pathname || location.state?.from || "/shop";
 
   const validate = () => {
     let formErrors = {};
@@ -39,30 +39,26 @@ function Login() {
     return Object.keys(formErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validate()) {
       setIsSubmitting(true);
-      
-      // Simulate API verification
-      setTimeout(() => {
+      setErrors({});
+
+      try {
+        await login(email, password);
         setIsSubmitting(false);
         setLoginSuccess(true);
-        
-        // Save temporary user info
-        loginUser({
-          name: "Dunmini Rathnayake",
-          email: email,
-          phone: "+94771234567",
-          address: "Negombo, Sri Lanka",
-        });
         
         // Redirect after delay
         setTimeout(() => {
           navigate(redirectPath);
         }, 1500);
-      }, 1500);
+      } catch (err) {
+        setIsSubmitting(false);
+        setErrors({ server: err.message || "Invalid credentials. Please try again." });
+      }
     }
   };
 
@@ -140,6 +136,11 @@ function Login() {
                   <p className="text-neutral-500 font-light text-xs">
                     Please log in using your account credentials.
                   </p>
+                  {errors.server && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs font-light tracking-wide rounded-md animate-fade-in">
+                      {errors.server}
+                    </div>
+                  )}
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">

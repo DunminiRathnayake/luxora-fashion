@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
 
@@ -22,6 +23,8 @@ export const formatPrice = (value) => {
 };
 
 export const CartProvider = ({ children }) => {
+  const { user, login: loginUser, logout: logoutUser } = useAuth();
+  
   const [cartItems, setCartItems] = useState(() => {
     try {
       const saved = localStorage.getItem("luxora_cart");
@@ -30,25 +33,6 @@ export const CartProvider = ({ children }) => {
       return [];
     }
   });
-
-  const [user, setUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem("luxora_user");
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  const loginUser = (userData) => {
-    setUser(userData);
-    localStorage.setItem("luxora_user", JSON.stringify(userData));
-  };
-
-  const logoutUser = () => {
-    setUser(null);
-    localStorage.removeItem("luxora_user");
-  };
 
   useEffect(() => {
     localStorage.setItem("luxora_cart", JSON.stringify(cartItems));

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { loginAdmin } from "../services/adminAuthService";
+import { useAuth } from "../../context/AuthContext";
 import { Shield, ArrowRight, Eye, EyeOff } from "lucide-react";
 
 function AdminLogin() {
@@ -13,8 +13,9 @@ function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false);
   
   const navigate = useNavigate();
+  const { login, logout } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     
@@ -25,17 +26,23 @@ function AdminLogin() {
 
     setIsLoading(true);
     
-    // Simulate luxury slow loading/verification (700ms) for high-end feel
-    setTimeout(() => {
-      const success = loginAdmin(email, password, rememberMe);
-      setIsLoading(false);
+    try {
+      const data = await login(email, password);
       
-      if (success) {
-        navigate("/admin");
-      } else {
-        setError("Invalid administrative credentials.");
+      // Enforce admin privileges checks
+      if (data.role !== "admin") {
+        logout();
+        setError("Access denied. Administrative role required.");
+        setIsLoading(false);
+        return;
       }
-    }, 850000 / 1000000); // ~850ms
+      
+      setIsLoading(false);
+      navigate("/admin");
+    } catch (err) {
+      setIsLoading(false);
+      setError(err.message || "Invalid administrative credentials.");
+    }
   };
 
   return (
