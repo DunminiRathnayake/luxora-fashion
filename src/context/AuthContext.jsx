@@ -9,6 +9,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const logout = () => {
+    localStorage.removeItem("luxora_token");
+    setToken(null);
+    setUser(null);
+    setError(null);
+  };
+
   useEffect(() => {
     const loadUser = async () => {
       if (token) {
@@ -62,13 +69,6 @@ export const AuthProvider = ({ children }) => {
       setError(err.message);
       throw err;
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem("luxora_token");
-    setToken(null);
-    setUser(null);
-    setError(null);
   };
 
   return (

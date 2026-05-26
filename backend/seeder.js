@@ -11,6 +11,11 @@ const importData = async () => {
   try {
     await connectDB();
 
+    if (mongoose.connection.readyState !== 1) {
+      console.warn("MongoDB is offline or MONGO_URI is missing. Seeding skipped for offline/mock development.");
+      process.exit(0);
+    }
+
     // Clear existing data
     await Product.deleteMany();
     await User.deleteMany();
