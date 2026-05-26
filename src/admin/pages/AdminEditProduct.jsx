@@ -58,8 +58,8 @@ function AdminEditProduct() {
       const img = product.image || (product.images && product.images[0]) || "";
       if (img) {
         setUploadedUrl(img);
-        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        const fullUrl = img.startsWith("http") || img.startsWith("/") ? img : `${API_URL}${img}`;
+        const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000");
+        const fullUrl = img.startsWith("http") ? img : `${API_URL}${img}`;
         setPreviewUrl(fullUrl);
       }
     }
@@ -177,9 +177,9 @@ function AdminEditProduct() {
   };
 
   const getPreviewImage = () => {
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000");
     if (!previewUrl) return "";
-    if (previewUrl.startsWith("blob:") || previewUrl.startsWith("http") || previewUrl.startsWith("/")) {
+    if (previewUrl.startsWith("blob:") || previewUrl.startsWith("http")) {
       return previewUrl;
     }
     return `${API_URL}${previewUrl}`;

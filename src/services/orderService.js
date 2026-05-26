@@ -1,4 +1,11 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const getApiUrl = () => {
+  if (import.meta.env.PROD) {
+    return ""; // Same-origin relative route on production
+  }
+  return import.meta.env.VITE_API_URL || "http://localhost:5000";
+};
+
+const API_URL = getApiUrl();
 
 export const createOrder = async (orderData) => {
   const response = await fetch(`${API_URL}/api/orders`, {

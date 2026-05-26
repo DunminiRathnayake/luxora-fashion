@@ -34,7 +34,7 @@ function AdminProducts() {
   };
 
   const getProductImage = (p) => {
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000");
     if (!p.image) return "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
     if (p.image.startsWith("http")) return p.image;
     return `${API_URL}${p.image}`;

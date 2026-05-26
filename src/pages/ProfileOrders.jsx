@@ -129,7 +129,7 @@ function ProfileOrders() {
   const { orders, loading, error } = useMyOrders();
 
   const getProductImage = (item) => {
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000");
     const img = item.image;
     if (!img) return "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
     if (img.startsWith("http")) return img;

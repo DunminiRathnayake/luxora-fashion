@@ -2,26 +2,35 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 
-// Ensure uploads folder exists
+const isProduction = process.env.NODE_ENV === "production" || process.env.VERCEL;
 const uploadsDir = path.join(process.cwd(), "backend", "uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+
+if (!isProduction) {
+  try {
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+  } catch (err) {
+    console.error("Failed to create uploads directory:", err);
+  }
 }
 
-// Disk storage settings
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, uploadsDir);
-  },
-  filename(req, file, cb) {
-    // Unique naming
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`
-    );
-  },
-});
+// Memory storage in production/Vercel (stateless serverless environment), disk storage in local dev
+const storage = isProduction
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination(req, file, cb) {
+        cb(null, uploadsDir);
+      },
+      filename(req, file, cb) {
+        // Unique naming
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(
+          null,
+          `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`
+        );
+      },
+    });
 
 // File filter validation
 const fileFilter = (req, file, cb) => {
