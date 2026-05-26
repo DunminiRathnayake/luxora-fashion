@@ -431,7 +431,7 @@ Product Code: ${sku}`
             {/* Brand and SKU */}
             <div className="flex justify-between items-baseline mb-2">
               <span className="text-[10px] font-semibold tracking-widest text-neutral-400 uppercase">
-                LUXORA CURATIONS
+                LUXORA CURATIONS.
               </span>
               <span className="text-[9px] font-mono text-neutral-400 uppercase">
                 CODE: {sku}
