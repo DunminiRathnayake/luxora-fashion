@@ -163,13 +163,14 @@ export const deleteOrder = asyncHandler(async (req, res) => {
 
 // @desc    Get logged in user orders
 // @route   GET /api/orders/my-orders
-// @access  Public
+// @access  Private
 export const getMyOrders = asyncHandler(async (req, res) => {
-  const email = req.query.email || req.headers["x-user-email"];
+  // Enforce logged-in user email or fallback to headers/query for backwards compatibility/offline
+  const email = req.user ? req.user.email : (req.query.email || req.headers["x-user-email"]);
 
   if (!email) {
     res.status(400);
-    throw new Error("Email parameter is required to retrieve customer order records");
+    throw new Error("User email is required to retrieve customer order records");
   }
 
   if (mongoose.connection.readyState === 1) {

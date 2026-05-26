@@ -7,6 +7,15 @@ const getApiUrl = () => {
 
 const API_URL = getApiUrl();
 
+const getHeaders = (headers = {}) => {
+  const token = localStorage.getItem("luxora_token");
+  const authHeaders = { ...headers };
+  if (token) {
+    authHeaders["Authorization"] = `Bearer ${token}`;
+  }
+  return authHeaders;
+};
+
 // Helper to map Mongoose _id to a simple frontend id key
 const mapProduct = (p) => {
   if (!p) return null;
@@ -21,9 +30,9 @@ const mapProduct = (p) => {
 export const createProduct = async (productData) => {
   const response = await fetch(`${API_URL}/api/products`, {
     method: "POST",
-    headers: {
+    headers: getHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(productData),
   });
 
@@ -39,9 +48,9 @@ export const createProduct = async (productData) => {
 export const updateProduct = async (id, productData) => {
   const response = await fetch(`${API_URL}/api/products/${id}`, {
     method: "PUT",
-    headers: {
+    headers: getHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(productData),
   });
 
@@ -57,6 +66,7 @@ export const updateProduct = async (id, productData) => {
 export const deleteProduct = async (id) => {
   const response = await fetch(`${API_URL}/api/products/${id}`, {
     method: "DELETE",
+    headers: getHeaders(),
   });
 
   if (!response.ok) {
@@ -74,6 +84,11 @@ export const uploadImage = (file, onProgress) => {
     formData.append("image", file);
 
     xhr.open("POST", `${API_URL}/api/upload`);
+
+    const token = localStorage.getItem("luxora_token");
+    if (token) {
+      xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+    }
 
     if (onProgress) {
       xhr.upload.addEventListener("progress", (event) => {

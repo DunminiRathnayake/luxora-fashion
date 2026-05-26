@@ -7,12 +7,21 @@ const getApiUrl = () => {
 
 const API_URL = getApiUrl();
 
+const getHeaders = (headers = {}) => {
+  const token = localStorage.getItem("luxora_token");
+  const authHeaders = { ...headers };
+  if (token) {
+    authHeaders["Authorization"] = `Bearer ${token}`;
+  }
+  return authHeaders;
+};
+
 export const createOrder = async (orderData) => {
   const response = await fetch(`${API_URL}/api/orders`, {
     method: "POST",
-    headers: {
+    headers: getHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify(orderData),
   });
 
@@ -25,7 +34,9 @@ export const createOrder = async (orderData) => {
 };
 
 export const getOrders = async () => {
-  const response = await fetch(`${API_URL}/api/orders`);
+  const response = await fetch(`${API_URL}/api/orders`, {
+    headers: getHeaders(),
+  });
   
   if (!response.ok) {
     const err = await response.json();
@@ -36,7 +47,9 @@ export const getOrders = async () => {
 };
 
 export const getSingleOrder = async (id) => {
-  const response = await fetch(`${API_URL}/api/orders/${id}`);
+  const response = await fetch(`${API_URL}/api/orders/${id}`, {
+    headers: getHeaders(),
+  });
 
   if (!response.ok) {
     const err = await response.json();
@@ -49,9 +62,9 @@ export const getSingleOrder = async (id) => {
 export const updateOrderStatus = async (id, status) => {
   const response = await fetch(`${API_URL}/api/orders/${id}/status`, {
     method: "PUT",
-    headers: {
+    headers: getHeaders({
       "Content-Type": "application/json",
-    },
+    }),
     body: JSON.stringify({ status }),
   });
 
@@ -66,6 +79,7 @@ export const updateOrderStatus = async (id, status) => {
 export const deleteOrder = async (id) => {
   const response = await fetch(`${API_URL}/api/orders/${id}`, {
     method: "DELETE",
+    headers: getHeaders(),
   });
 
   if (!response.ok) {
@@ -77,7 +91,9 @@ export const deleteOrder = async (id) => {
 };
 
 export const getMyOrders = async (email) => {
-  const response = await fetch(`${API_URL}/api/orders/my-orders?email=${encodeURIComponent(email)}`);
+  const response = await fetch(`${API_URL}/api/orders/my-orders?email=${encodeURIComponent(email)}`, {
+    headers: getHeaders(),
+  });
 
   if (!response.ok) {
     const err = await response.json();
