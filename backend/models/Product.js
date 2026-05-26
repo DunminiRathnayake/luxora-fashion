@@ -40,6 +40,10 @@ const productSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    cloudinaryPublicId: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

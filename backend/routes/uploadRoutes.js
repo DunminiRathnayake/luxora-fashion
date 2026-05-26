@@ -1,41 +1,44 @@
 import express from "express";
 import upload from "../middleware/uploadMiddleware.js";
+import { uploadToCloudinary } from "../config/cloudinary.js";
+import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
-  upload.single("image")(req, res, (err) => {
+router.post("/", protect, admin, (req, res) => {
+  upload.single("image")(req, res, async (err) => {
     if (err) {
       return res.status(400).json({ message: err.message });
-    }
-
-    const isProduction = process.env.NODE_ENV === "production" || process.env.VERCEL;
-
-    if (isProduction) {
-      // In production serverless functions, local filesystem writes are ephemeral.
-      // TODO: Integrate Cloudinary or Vercel Blob storage here.
-      // For Vercel Blob integration:
-      // 1. Install package: npm install @vercel/blob
-      // 2. Import: import { put } from "@vercel/blob";
-      // 3. Upload:
-      //    const blob = await put(req.file.originalname, req.file.buffer, { access: 'public' });
-      //    return res.json({ imageUrl: blob.url });
-      
-      console.warn("Production serverless function environment detected. Mocking local file upload by returning a curated fashion backdrop.");
-      return res.json({
-        imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80",
-        message: "Demo fallback: Image upload mocked successfully in production serverless container. Setup Cloudinary/Vercel Blob in uploadRoutes.js for actual file preservation."
-      });
     }
 
     if (!req.file) {
       return res.status(400).json({ message: "No image file provided" });
     }
 
-    // Return the relative URL so it can be served statically
-    res.json({
-      imageUrl: `/uploads/${req.file.filename}`,
-    });
+    try {
+      // Graceful fallback for offline testing if Cloudinary credentials are not set
+      if (!process.env.CLOUDINARY_CLOUD_NAME) {
+        console.warn("Cloudinary configuration missing. Mocking image upload.");
+        return res.json({
+          imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80",
+          public_id: "mock_cloudinary_public_id",
+          message: "Mock upload success. Set up Cloudinary keys in .env for actual storage."
+        });
+      }
+
+      // Upload buffer directly to Cloudinary
+      const result = await uploadToCloudinary(req.file.buffer);
+
+      return res.json({
+        imageUrl: result.secure_url,
+        public_id: result.public_id,
+      });
+    } catch (error) {
+      console.error("Cloudinary upload failed:", error);
+      return res.status(500).json({
+        message: error.message || "Failed to upload image to Cloudinary",
+      });
+    }
   });
 });
 

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Product from "../models/Product.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { sampleProducts } from "../data/products.js";
+import { getPublicIdFromUrl, deleteFromCloudinary } from "../config/cloudinary.js";
 
 // @desc    Get all products
 // @route   GET /api/products
@@ -50,6 +51,7 @@ export const createProduct = asyncHandler(async (req, res) => {
   const { name, price, description, image, images, category, sizes, stock, featured } = req.body;
 
   const productImages = images || (image ? [image] : []);
+  const cloudinaryPublicId = getPublicIdFromUrl(productImages[0]);
 
   if (mongoose.connection.readyState === 1) {
     const product = new Product({
@@ -57,6 +59,7 @@ export const createProduct = asyncHandler(async (req, res) => {
       price: Number(price),
       description,
       images: productImages,
+      cloudinaryPublicId,
       category,
       sizes: sizes || ["XS", "S", "M", "L", "XL"],
       stock: Number(stock) || 0,
@@ -73,6 +76,7 @@ export const createProduct = asyncHandler(async (req, res) => {
       price: Number(price),
       description,
       images: productImages,
+      cloudinaryPublicId,
       category,
       sizes: sizes || ["XS", "S", "M", "L", "XL"],
       stock: Number(stock) || 0,
@@ -92,15 +96,36 @@ export const updateProduct = asyncHandler(async (req, res) => {
   const productId = req.params.id;
 
   const productImages = images || (image ? [image] : []);
+  const newPublicId = getPublicIdFromUrl(productImages[0]);
 
   if (mongoose.connection.readyState === 1) {
     if (productId.match(/^[0-9a-fA-F]{24}$/)) {
       const product = await Product.findById(productId);
       if (product) {
+        // Image replacement check
+        const oldPublicId = product.cloudinaryPublicId;
+        if (
+          oldPublicId &&
+          !oldPublicId.startsWith("mock") &&
+          newPublicId &&
+          oldPublicId !== newPublicId
+        ) {
+          try {
+            await deleteFromCloudinary(oldPublicId);
+          } catch (err) {
+            console.error("Failed to delete replaced image from Cloudinary:", err.message);
+          }
+        }
+
         product.name = name || product.name;
         product.price = price !== undefined ? Number(price) : product.price;
         product.description = description || product.description;
-        product.images = productImages.length > 0 ? productImages : product.images;
+        
+        if (productImages.length > 0) {
+          product.images = productImages;
+          product.cloudinaryPublicId = newPublicId;
+        }
+
         product.category = category || product.category;
         product.sizes = sizes || product.sizes;
         product.stock = stock !== undefined ? Number(stock) : product.stock;
@@ -115,10 +140,30 @@ export const updateProduct = asyncHandler(async (req, res) => {
   // Fallback for offline or local sample list
   const sampleProduct = sampleProducts.find((p) => p._id === productId);
   if (sampleProduct) {
+    // Image replacement check for offline fallback
+    const oldPublicId = sampleProduct.cloudinaryPublicId;
+    if (
+      oldPublicId &&
+      !oldPublicId.startsWith("mock") &&
+      newPublicId &&
+      oldPublicId !== newPublicId
+    ) {
+      try {
+        await deleteFromCloudinary(oldPublicId);
+      } catch (err) {
+        console.error("Failed to delete replaced offline image from Cloudinary:", err.message);
+      }
+    }
+
     sampleProduct.name = name || sampleProduct.name;
     sampleProduct.price = price !== undefined ? Number(price) : sampleProduct.price;
     sampleProduct.description = description || sampleProduct.description;
-    sampleProduct.images = productImages.length > 0 ? productImages : sampleProduct.images;
+    
+    if (productImages.length > 0) {
+      sampleProduct.images = productImages;
+      sampleProduct.cloudinaryPublicId = newPublicId;
+    }
+
     sampleProduct.category = category || sampleProduct.category;
     sampleProduct.sizes = sizes || sampleProduct.sizes;
     sampleProduct.stock = stock !== undefined ? Number(stock) : sampleProduct.stock;
@@ -141,6 +186,14 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     if (productId.match(/^[0-9a-fA-F]{24}$/)) {
       const product = await Product.findById(productId);
       if (product) {
+        // Cloudinary asset cleanup
+        if (product.cloudinaryPublicId && !product.cloudinaryPublicId.startsWith("mock")) {
+          try {
+            await deleteFromCloudinary(product.cloudinaryPublicId);
+          } catch (err) {
+            console.error("Failed to delete product image from Cloudinary:", err.message);
+          }
+        }
         await Product.deleteOne({ _id: productId });
         return res.json({ message: "Product removed successfully" });
       }
@@ -150,6 +203,15 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   // Fallback
   const index = sampleProducts.findIndex((p) => p._id === productId);
   if (index !== -1) {
+    const fallbackProduct = sampleProducts[index];
+    // Cloudinary asset cleanup for offline fallback items if they have real assets
+    if (fallbackProduct.cloudinaryPublicId && !fallbackProduct.cloudinaryPublicId.startsWith("mock")) {
+      try {
+        await deleteFromCloudinary(fallbackProduct.cloudinaryPublicId);
+      } catch (err) {
+        console.error("Failed to delete offline product image from Cloudinary:", err.message);
+      }
+    }
     sampleProducts.splice(index, 1);
     return res.json({ message: "Product removed successfully from fallback database" });
   } else {
