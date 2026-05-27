@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import SEO from "../components/SEO";
 
 function Login() {
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ function Login() {
 
   return (
     <div className="min-h-[85vh] flex flex-col lg:grid lg:grid-cols-12 bg-white">
+      <SEO title="Sign In" description="Log in to your Luxora account to view order history and update billing details." />
       {/* Left Panel: Fashion Imagery */}
       <div className="h-60 sm:h-72 lg:h-auto lg:col-span-5 relative bg-neutral-900 overflow-hidden shrink-0">
         <motion.img
@@ -158,7 +160,7 @@ function Login() {
                           setEmail(e.target.value);
                           if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
                         }}
-                        className={`w-full pl-8 pr-3 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                        className={`w-full pl-8 pr-3 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black ${
                           errors.email
                             ? "border-red-400 focus:border-red-500"
                             : "border-neutral-200 focus:border-black"
@@ -196,7 +198,7 @@ function Login() {
                           setPassword(e.target.value);
                           if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
                         }}
-                        className={`w-full pl-8 pr-10 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                        className={`w-full pl-8 pr-10 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black ${
                           errors.password
                             ? "border-red-400 focus:border-red-500"
                             : "border-neutral-200 focus:border-black"

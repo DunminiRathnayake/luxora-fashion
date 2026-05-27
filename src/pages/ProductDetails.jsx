@@ -9,6 +9,8 @@ import { Plus, Minus, Heart, ChevronDown, Star, MessageSquare, Upload, ArrowRigh
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useCartDrawer } from "../context/CartDrawerContext";
+import SEO from "../components/SEO";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 // Local lookups for curated multi-angle galleries & swatches to establish real brand layouts
 const PRODUCT_GALLERIES = {
@@ -365,8 +367,38 @@ Product Code: ${sku}`
     (product.sizes || ["XS", "S", "M", "L", "XL"]).includes(sm.dbValue)
   );
 
+  // JSON-LD structured data for Google Search snippet
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": productImages[0] || product.image,
+    "description": product.description,
+    "sku": sku,
+    "offers": {
+      "@type": "Offer",
+      "url": typeof window !== "undefined" ? window.location.href : "",
+      "priceCurrency": "LKR",
+      "price": getNumericPrice(product.price),
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+      <SEO 
+        title={product.name}
+        description={product.description}
+        image={productImages[0] || product.image}
+        type="product"
+      />
+      
+      {/* Structured Product Schema */}
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLdData)}
+      </script>
+
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         
         {/* 1. Breadcrumbs */}
@@ -396,11 +428,17 @@ Product Code: ${sku}`
                     <button
                       key={idx}
                       onClick={() => setActiveImage(img)}
-                      className={`w-14 h-18 md:w-18 md:h-24 border rounded-sm overflow-hidden shrink-0 transition-all ${
+                      aria-label={`View multi-angle alternative ${idx + 1}`}
+                      className={`w-14 h-18 md:w-18 md:h-24 border rounded-sm overflow-hidden shrink-0 transition-all focus-visible:ring-1 focus-visible:ring-black focus-visible:outline-none ${
                         activeImage === img ? "border-black ring-1 ring-black scale-102" : "border-neutral-200 hover:border-neutral-450"
                       }`}
                     >
-                      <img src={img} alt={`view ${idx + 1}`} className="w-full h-full object-cover" />
+                      <img 
+                        src={getOptimizedImageUrl(img, 150)} 
+                        alt={`view alternative ${idx + 1}`} 
+                        loading="lazy"
+                        className="w-full h-full object-cover" 
+                      />
                     </button>
                   ))}
                 </div>
@@ -415,8 +453,8 @@ Product Code: ${sku}`
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    src={activeImage}
-                    alt={product.name}
+                    src={getOptimizedImageUrl(activeImage, 850)}
+                    alt={`${product.name} main product angle`}
                     className="w-full h-full object-cover cursor-zoom-in transition-transform duration-700 hover:scale-108"
                   />
                 </AnimatePresence>
@@ -489,7 +527,8 @@ Product Code: ${sku}`
                     <button
                       key={color.name}
                       onClick={() => setSelectedColor(color.name)}
-                      className={`w-7 h-7 rounded-full border transition-all flex items-center justify-center cursor-pointer ${
+                      aria-label={`Select Color ${color.name}`}
+                      className={`w-7 h-7 rounded-full border transition-all flex items-center justify-center cursor-pointer focus-visible:ring-1 focus-visible:ring-neutral-500 focus-visible:outline-none ${
                         isSelected ? "border-black scale-108 ring-1 ring-neutral-350" : "border-neutral-200 hover:border-neutral-450"
                       }`}
                       style={{ padding: "2px" }}
@@ -525,7 +564,8 @@ Product Code: ${sku}`
                     <button
                       key={sm.dbValue}
                       onClick={() => selectSize(sm.dbValue)}
-                      className={`px-3 py-2 border rounded-sm transition-all duration-300 flex flex-col items-center justify-center min-w-16 cursor-pointer ${
+                      aria-label={`Select UK Size ${sm.label}`}
+                      className={`px-3 py-2 border rounded-sm transition-all duration-300 flex flex-col items-center justify-center min-w-16 cursor-pointer focus-visible:ring-1 focus-visible:ring-neutral-500 focus-visible:outline-none ${
                         isSelected
                           ? "bg-black text-white border-black"
                           : "bg-transparent text-neutral-600 border-neutral-200 hover:text-black hover:border-black"
@@ -553,20 +593,24 @@ Product Code: ${sku}`
               </span>
               <div className="flex items-center border border-neutral-250 rounded-full w-28 justify-between py-0.5 px-0.5 bg-neutral-50 shadow-inner">
                 <button
+                  type="button"
                   onClick={() => quantity > 1 && setQuantity(quantity - 1)}
                   disabled={quantity <= 1}
-                  className={`w-7 h-7 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer ${
+                  aria-label="Decrease quantity"
+                  className={`w-7 h-7 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none ${
                     quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
                 >
                   <Minus className="w-3 h-3 text-neutral-600" />
                 </button>
-                <span className="text-xs font-semibold text-neutral-850 w-7 text-center select-none">
+                <span className="text-xs font-semibold text-neutral-850 w-7 text-center select-none" aria-live="polite">
                   {quantity}
                 </span>
                 <button
+                  type="button"
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer"
+                  aria-label="Increase quantity"
+                  className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none"
                 >
                   <Plus className="w-3 h-3 text-neutral-600" />
                 </button>

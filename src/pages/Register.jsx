@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, User, Mail, Lock, Check, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import SEO from "../components/SEO";
 
 function Register() {
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ function Register() {
 
   return (
     <div className="min-h-[85vh] flex flex-col lg:grid lg:grid-cols-12 bg-white">
+      <SEO title="Register Profile" description="Create your Luxora account to start shopping premium collections and access exclusive benefits." />
       {/* Left Panel: Fashion Imagery */}
       <div className="h-60 sm:h-72 lg:h-auto lg:col-span-5 relative bg-neutral-900 overflow-hidden shrink-0">
         <motion.img
@@ -169,7 +171,7 @@ function Register() {
                           setName(e.target.value);
                           if (errors.name) setErrors((prev) => ({ ...prev, name: null }));
                         }}
-                        className={`w-full pl-8 pr-3 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                        className={`w-full pl-8 pr-3 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black ${
                           errors.name
                             ? "border-red-400 focus:border-red-500"
                             : "border-neutral-200 focus:border-black"
@@ -198,7 +200,7 @@ function Register() {
                           setEmail(e.target.value);
                           if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
                         }}
-                        className={`w-full pl-8 pr-3 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                        className={`w-full pl-8 pr-3 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black ${
                           errors.email
                             ? "border-red-400 focus:border-red-500"
                             : "border-neutral-200 focus:border-black"
@@ -227,7 +229,7 @@ function Register() {
                           setPassword(e.target.value);
                           if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
                         }}
-                        className={`w-full pl-8 pr-10 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                        className={`w-full pl-8 pr-10 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black ${
                           errors.password
                             ? "border-red-400 focus:border-red-500"
                             : "border-neutral-200 focus:border-black"
@@ -263,7 +265,7 @@ function Register() {
                           setConfirmPassword(e.target.value);
                           if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: null }));
                         }}
-                        className={`w-full pl-8 pr-10 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light ${
+                        className={`w-full pl-8 pr-10 py-2.5 bg-transparent border-b outline-none transition-all duration-300 text-sm font-light focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black ${
                           errors.confirmPassword
                             ? "border-red-400 focus:border-red-500"
                             : "border-neutral-200 focus:border-black"

@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { useCartDrawer } from "../context/CartDrawerContext";
 import { Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 const SIZE_MAPPING = [
   { dbValue: "XS", label: "8" },
@@ -53,9 +54,10 @@ function ProductCard({ product }) {
     >
       <div className="overflow-hidden relative aspect-[3/4] bg-neutral-50 border border-neutral-100 rounded-sm">
         <img
-          src={product.image}
+          src={getOptimizedImageUrl(product.image, 400)}
           alt={product.name}
           className="w-full h-full object-cover transition duration-750 ease-out group-hover:scale-103"
+          loading="lazy"
         />
         
         {/* Heart Wishlist Overlay */}
@@ -63,8 +65,9 @@ function ProductCard({ product }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.85 }}
           onClick={handleWishlistClick}
-          className="absolute top-3.5 right-3.5 z-20 w-8.5 h-8.5 bg-white/90 hover:bg-white text-black rounded-full flex items-center justify-center transition-colors duration-300 shadow-sm border border-neutral-100 cursor-pointer"
+          className="absolute top-3.5 right-3.5 z-20 w-8.5 h-8.5 bg-white/90 hover:bg-white text-black rounded-full flex items-center justify-center transition-colors duration-300 shadow-sm border border-neutral-100 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
           title={isSaved ? "Remove from wishlist" : "Add to wishlist"}
+          aria-label={isSaved ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
         >
           <Heart
             className={`w-3.5 h-3.5 transition-colors duration-300 ${
@@ -97,8 +100,9 @@ function ProductCard({ product }) {
                       <button
                         key={sm.dbValue}
                         onClick={(e) => handleQuickAdd(e, sm.dbValue)}
-                        className="w-8 h-8 rounded-full border border-white/20 bg-white/10 hover:bg-white hover:text-black hover:border-white backdrop-blur-md text-[10px] font-semibold text-white flex items-center justify-center transition-all duration-300 cursor-pointer scale-95 hover:scale-105 active:scale-95"
+                        className="w-8 h-8 rounded-full border border-white/20 bg-white/10 hover:bg-white hover:text-black hover:border-white backdrop-blur-md text-[10px] font-semibold text-white flex items-center justify-center transition-all duration-300 cursor-pointer scale-95 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white"
                         title={`Quick Add UK ${sm.label}`}
+                        aria-label={`Quick add ${product.name} in size UK ${sm.label}`}
                       >
                         {sm.label}
                       </button>

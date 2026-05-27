@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 function BrandStory() {
   return (
@@ -14,8 +15,9 @@ function BrandStory() {
         className="h-[500px] md:h-auto overflow-hidden bg-neutral-100"
       >
         <img
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80"
-          alt="Fashion Story"
+          src={getOptimizedImageUrl("https://images.unsplash.com/photo-1483985988355-763728e1935b", 1000)}
+          alt="Fashion Story Curation Narrative"
+          loading="lazy"
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-[1.5s]"
         />
       </motion.div>

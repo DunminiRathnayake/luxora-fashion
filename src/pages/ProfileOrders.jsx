@@ -3,6 +3,8 @@ import { formatPrice } from "../context/CartContext";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ShoppingBag, ArrowRight, Calendar, MapPin, CheckCircle, Package, Truck, Clock, ShieldAlert } from "lucide-react";
+import SEO from "../components/SEO";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 // Luxury Status Progress Timeline component
 function LuxuryTimeline({ status }) {
@@ -43,7 +45,14 @@ function LuxuryTimeline({ status }) {
       </span>
       
       {/* Desktop Horizontal Timeline */}
-      <div className="hidden md:flex justify-between items-center relative pr-4">
+      <div 
+        className="hidden md:flex justify-between items-center relative pr-4"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax={steps.length - 1}
+        aria-valuenow={currentIdx}
+        aria-valuetext={`Order fulfillment state: ${status}`}
+      >
         {/* Progress connecting lines behind */}
         <div className="absolute top-1/2 left-[5%] right-[5%] -translate-y-1/2 h-[1px] bg-neutral-200 z-0">
           <div
@@ -58,7 +67,11 @@ function LuxuryTimeline({ status }) {
           const StepIcon = getStepIcon(step);
 
           return (
-            <div key={step} className="flex flex-col items-center z-10 relative bg-white px-2">
+            <div 
+              key={step} 
+              className="flex flex-col items-center z-10 relative bg-white px-2"
+              aria-current={isActive ? "step" : undefined}
+            >
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-500 ${
                   isActive
@@ -67,8 +80,9 @@ function LuxuryTimeline({ status }) {
                     ? "bg-white text-black border-black"
                     : "bg-neutral-50 text-neutral-300 border-neutral-200"
                 }`}
+                aria-label={`${step} status ${isActive ? "(current)" : isCompleted ? "(completed)" : "(pending)"}`}
               >
-                <StepIcon className="w-4 h-4" />
+                <StepIcon className="w-4 h-4" aria-hidden="true" />
               </div>
               <span
                 className={`text-[9px] uppercase tracking-wider mt-3 font-semibold transition-colors duration-300 ${
@@ -83,7 +97,14 @@ function LuxuryTimeline({ status }) {
       </div>
 
       {/* Mobile Vertical Timeline */}
-      <div className="flex md:hidden flex-col gap-6 relative pl-6">
+      <div 
+        className="flex md:hidden flex-col gap-6 relative pl-6"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax={steps.length - 1}
+        aria-valuenow={currentIdx}
+        aria-valuetext={`Order fulfillment state: ${status}`}
+      >
         {/* Progress connecting line */}
         <div className="absolute left-[34px] top-4 bottom-4 w-[1px] bg-neutral-200 z-0">
           <div
@@ -98,7 +119,11 @@ function LuxuryTimeline({ status }) {
           const StepIcon = getStepIcon(step);
 
           return (
-            <div key={step} className="flex items-center gap-4 z-10 relative">
+            <div 
+              key={step} 
+              className="flex items-center gap-4 z-10 relative"
+              aria-current={isActive ? "step" : undefined}
+            >
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center border shrink-0 transition-all duration-500 bg-white ${
                   isActive
@@ -107,8 +132,9 @@ function LuxuryTimeline({ status }) {
                     ? "bg-white text-black border-black"
                     : "bg-neutral-50 text-neutral-300 border-neutral-200"
                 }`}
+                aria-label={`${step} status ${isActive ? "(current)" : isCompleted ? "(completed)" : "(pending)"}`}
               >
-                <StepIcon className="w-4 h-4" />
+                <StepIcon className="w-4 h-4" aria-hidden="true" />
               </div>
               <span
                 className={`text-[10px] uppercase tracking-widest font-semibold ${
@@ -131,13 +157,18 @@ function ProfileOrders() {
   const getProductImage = (item) => {
     const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000");
     const img = item.image;
-    if (!img) return "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
-    if (img.startsWith("http")) return img;
-    return `${API_URL}${img}`;
+    let url = img;
+    if (!img) {
+      url = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
+    } else if (!img.startsWith("http")) {
+      url = `${API_URL}${img}`;
+    }
+    return getOptimizedImageUrl(url, 120);
   };
 
   return (
     <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+      <SEO title="Your Orders" description="Track your order fulfillment, view delivery status, and review details of your luxury purchases." />
       <div className="max-w-4xl mx-auto px-6 md:px-10">
         
         {/* Page Header */}
@@ -224,6 +255,7 @@ function ProfileOrders() {
                               src={getProductImage(item)}
                               alt={item.name}
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                           </div>
                           <div>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 function Collections() {
   const containerVariants = {
@@ -24,17 +25,17 @@ function Collections() {
   const categoriesList = [
     {
       name: "Dresses",
-      image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80",
+      image: getOptimizedImageUrl("https://images.unsplash.com/photo-1496747611176-843222e1e57c", 800),
       query: "Dresses",
     },
     {
       name: "Essentials",
-      image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80",
+      image: getOptimizedImageUrl("https://images.unsplash.com/photo-1529139574466-a303027c1d8b", 800),
       query: "Tops",
     },
     {
       name: "Evening Wear",
-      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
+      image: getOptimizedImageUrl("https://images.unsplash.com/photo-1515886657613-9f3515b0c78f", 800),
       query: "Evening Wear",
     },
   ];
@@ -71,7 +72,8 @@ function Collections() {
                 <div className="absolute inset-0 w-full h-full overflow-hidden bg-neutral-900">
                   <img
                     src={category.image}
-                    alt={category.name}
+                    alt={`${category.name} collection category banner`}
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   />
                   {/* Subtle luxury editorial overlay */}

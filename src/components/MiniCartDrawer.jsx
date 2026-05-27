@@ -4,6 +4,7 @@ import { useCart, formatPrice } from "../context/CartContext";
 import { useCartDrawer } from "../context/CartDrawerContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Trash2, ShoppingBag } from "lucide-react";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 export function MiniCartDrawer() {
   const { cartItems, updateQuantity, removeFromCart, subtotal, cartCount } = useCart();
@@ -35,8 +36,8 @@ export function MiniCartDrawer() {
   const getProductImage = (img) => {
     const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000");
     if (!img) return "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
-    if (img.startsWith("http")) return img;
-    return `${API_URL}${img}`;
+    const url = img.startsWith("http") ? img : `${API_URL}${img}`;
+    return getOptimizedImageUrl(url, 120);
   };
 
   const formatSizeLabel = (dbSize) => {
@@ -115,8 +116,9 @@ export function MiniCartDrawer() {
 
               <button
                 onClick={closeCart}
-                className="p-1.5 hover:bg-neutral-50 rounded-full text-neutral-800 transition-colors cursor-pointer"
+                className="p-1.5 hover:bg-neutral-50 rounded-full text-neutral-800 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
                 title="Close Drawer"
+                aria-label="Close shopping bag drawer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -145,6 +147,7 @@ export function MiniCartDrawer() {
                               src={getProductImage(item.image)}
                               alt={item.name}
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                           </div>
 
@@ -163,19 +166,24 @@ export function MiniCartDrawer() {
                             <div className="flex items-center border border-neutral-200 rounded-full w-24 justify-between py-0.5 px-0.5 bg-neutral-50 mt-2">
                               <button
                                 onClick={() => item.quantity > 1 && updateQuantity(item.key, item.quantity - 1)}
-                                className={`w-6 h-6 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer ${
+                                className={`w-6 h-6 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black ${
                                   item.quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                                 }`}
                                 disabled={item.quantity <= 1}
+                                aria-label={`Decrease quantity of ${item.name} size ${formatSizeLabel(item.size)}`}
                               >
                                 <Minus className="w-2.5 h-2.5 text-neutral-600" />
                               </button>
-                              <span className="text-[10px] font-semibold text-neutral-800 w-6 text-center select-none">
+                              <span 
+                                className="text-[10px] font-semibold text-neutral-800 w-6 text-center select-none"
+                                aria-label={`Current quantity is ${item.quantity}`}
+                              >
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.key, item.quantity + 1)}
-                                className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer"
+                                className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-neutral-200 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                                aria-label={`Increase quantity of ${item.name} size ${formatSizeLabel(item.size)}`}
                               >
                                 <Plus className="w-2.5 h-2.5 text-neutral-600" />
                               </button>
@@ -191,8 +199,9 @@ export function MiniCartDrawer() {
                           
                           <button
                             onClick={() => removeFromCart(item.key)}
-                            className="text-neutral-400 hover:text-red-600 transition-colors cursor-pointer p-1"
+                            className="text-neutral-400 hover:text-red-600 transition-colors cursor-pointer p-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
                             title="Remove item"
+                            aria-label={`Remove ${item.name} size ${formatSizeLabel(item.size)} from shopping bag`}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -292,8 +301,8 @@ export function CartToast() {
   const getProductImage = (img) => {
     const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://localhost:5000");
     if (!img) return "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80";
-    if (img.startsWith("http")) return img;
-    return `${API_URL}${img}`;
+    const url = img.startsWith("http") ? img : `${API_URL}${img}`;
+    return getOptimizedImageUrl(url, 120);
   };
 
   return (
@@ -308,7 +317,7 @@ export function CartToast() {
         >
           {/* Toast image */}
           <div className="w-12 h-16 bg-neutral-50 border border-neutral-100 overflow-hidden shrink-0 rounded-sm">
-            <img src={getProductImage(toast.image)} alt={toast.name} className="w-full h-full object-cover" />
+            <img src={getProductImage(toast.image)} alt={toast.name} className="w-full h-full object-cover" loading="lazy" />
           </div>
           
           {/* Toast details */}
@@ -338,8 +347,9 @@ export function CartToast() {
 
           <button
             onClick={() => setToast(null)}
-            className="text-neutral-400 hover:text-black self-start p-0.5 cursor-pointer"
+            className="text-neutral-400 hover:text-black self-start p-0.5 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
             title="Dismiss notification"
+            aria-label="Dismiss notification"
           >
             <X className="w-3.5 h-3.5" />
           </button>

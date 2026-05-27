@@ -4,6 +4,7 @@ import ProductSkeleton from "../components/ProductSkeleton";
 import { useProducts } from "../hooks/useProducts";
 import { Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import SEO from "../components/SEO";
 
 function Shop() {
   const { products, loading, error } = useProducts();
@@ -24,6 +25,10 @@ function Shop() {
 
   return (
     <div className="min-h-screen bg-white pb-20">
+      <SEO 
+        title="Shop The Collection"
+        description="Browse the exquisite Luxora fashion collection. Find structured evening dresses, standard luxury blazers, color swatches and standard UK sizes."
+      />
       {/* Hero Header */}
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-8 text-center">
         <h1 className="text-4xl md:text-5xl font-light tracking-widest uppercase mb-4">
