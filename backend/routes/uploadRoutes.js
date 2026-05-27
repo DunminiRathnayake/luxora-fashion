@@ -1,6 +1,5 @@
 import express from "express";
 import upload from "../middleware/uploadMiddleware.js";
-import { uploadToCloudinary } from "../config/cloudinary.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -26,12 +25,11 @@ router.post("/", protect, admin, (req, res) => {
         });
       }
 
-      // Upload buffer directly to Cloudinary
-      const result = await uploadToCloudinary(req.file.buffer);
-
+      // With multer-storage-cloudinary, the upload is done automatically.
+      // req.file.path holds the secure URL and req.file.filename holds the public_id.
       return res.json({
-        imageUrl: result.secure_url,
-        public_id: result.public_id,
+        imageUrl: req.file.path,
+        public_id: req.file.filename,
       });
     } catch (error) {
       console.error("Cloudinary upload failed:", error);
