@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useOrders } from "../hooks/useOrders";
 import { formatPrice } from "../../context/CartContext";
-import { Search, Eye, Trash2, ExternalLink, Calendar, Mail, Phone, MapPin, AlertCircle, ShoppingBag } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Search, Trash2, ExternalLink, Calendar, Mail, Phone, AlertCircle } from "lucide-react";
 
 function AdminOrders() {
   const { orders, loading, error, updateStatus, removeOrder } = useOrders();

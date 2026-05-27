@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminProducts } from "../hooks/useAdminProducts";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Search, Star, AlertCircle, AlertTriangle, ShieldCheck, X } from "lucide-react";
+import { Plus, Edit, Trash2, Search, Star, AlertCircle, AlertTriangle } from "lucide-react";
 
 function AdminProducts() {
   const { products, loading, error, removeProduct } = useAdminProducts();

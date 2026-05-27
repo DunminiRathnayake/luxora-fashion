@@ -104,14 +104,14 @@ export const uploadImage = (file, onProgress) => {
         try {
           const res = JSON.parse(xhr.responseText);
           resolve(res);
-        } catch (e) {
+        } catch {
           reject(new Error("Failed to parse upload response"));
         }
       } else {
         try {
           const res = JSON.parse(xhr.responseText);
           reject(new Error(res.message || "Upload failed"));
-        } catch (e) {
+        } catch {
           reject(new Error(`Upload failed with status ${xhr.status}`));
         }
       }

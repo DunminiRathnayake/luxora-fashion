@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trash2, ShoppingBag, Eye, Heart, ArrowRight } from "lucide-react";
+import { Trash2, ShoppingBag, Eye, Heart } from "lucide-react";
+import SEO from "../components/SEO";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 function Wishlist() {
   const { wishlistItems, removeFromWishlist } = useWishlist();
@@ -17,6 +19,7 @@ function Wishlist() {
 
   return (
     <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+      <SEO title="Saved Favorites" description="Review your saved favorite luxury fashion pieces on Luxora." />
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         
         {/* Page Title */}
@@ -67,7 +70,7 @@ function Wishlist() {
                     layout
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8, opacity: 0 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.4 }}
                     className="group border border-neutral-100 p-4 rounded-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-300 relative bg-white"
                   >
@@ -75,15 +78,17 @@ function Wishlist() {
                       {/* Product Image */}
                       <div className="overflow-hidden relative aspect-[3/4] bg-neutral-50 mb-4 rounded-sm">
                         <img
-                          src={product.image}
+                          src={getOptimizedImageUrl(product.image, 400)}
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1s]"
+                          loading="lazy"
                         />
                         {/* Remove absolute button */}
                         <button
                           onClick={() => removeFromWishlist(product.id)}
-                          className="absolute top-3 right-3 w-8 h-8 bg-white/90 hover:bg-black hover:text-white rounded-full flex items-center justify-center transition-colors duration-300 shadow-sm cursor-pointer z-10"
+                          className="absolute top-3 right-3 w-8 h-8 bg-white/90 hover:bg-black hover:text-white rounded-full flex items-center justify-center transition-colors duration-300 shadow-sm cursor-pointer z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
                           title="Remove item"
+                          aria-label={`Remove ${product.name} from wishlist`}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -105,7 +110,8 @@ function Wishlist() {
                     <div className="mt-6 space-y-2">
                       <button
                         onClick={() => handleMoveToCart(product)}
-                        className="w-full py-2.5 bg-black text-white text-[10px] uppercase tracking-widest font-semibold border border-black hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                        className="w-full py-2.5 bg-black text-white text-[10px] uppercase tracking-widest font-semibold border border-black hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                        aria-label={`Move ${product.name} to shopping bag`}
                       >
                         <ShoppingBag className="w-3 h-3" />
                         Move To Bag
@@ -113,7 +119,8 @@ function Wishlist() {
 
                       <Link
                         to={`/product/${product.id}`}
-                        className="w-full py-2.5 bg-transparent text-neutral-800 text-[10px] uppercase tracking-widest font-semibold border border-neutral-200 hover:border-black transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer no-underline"
+                        className="w-full py-2.5 bg-transparent text-neutral-800 text-[10px] uppercase tracking-widest font-semibold border border-neutral-200 hover:border-black transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer no-underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
+                        aria-label={`View details for ${product.name}`}
                       >
                         <Eye className="w-3 h-3" />
                         View Piece

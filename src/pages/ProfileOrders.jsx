@@ -1,8 +1,7 @@
 import { useMyOrders } from "../hooks/useMyOrders";
 import { formatPrice } from "../context/CartContext";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ShoppingBag, ArrowRight, Calendar, MapPin, CheckCircle, Package, Truck, Clock, ShieldAlert } from "lucide-react";
+import { ShoppingBag, Calendar, MapPin, CheckCircle, Package, Truck, Clock, ShieldAlert } from "lucide-react";
 import SEO from "../components/SEO";
 import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 

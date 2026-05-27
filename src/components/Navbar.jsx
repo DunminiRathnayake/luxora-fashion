@@ -161,17 +161,13 @@ function Navbar() {
               isAuthActive ? "text-black font-semibold" : ""
             }`}
           >
-            {({ isActive }) => (
-              <>
-                <span>Login</span>
-                {isAuthActive && (
-                  <motion.div
-                    layoutId="navUnderline"
-                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
-                )}
-              </>
+            <span>Login</span>
+            {isAuthActive && (
+              <motion.div
+                layoutId="navUnderline"
+                className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              />
             )}
           </NavLink>
         )}

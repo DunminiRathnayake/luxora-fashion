@@ -5,7 +5,7 @@ import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 import ProductSkeleton from "../components/ProductSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus, Heart, ChevronDown, Star, MessageSquare, Upload, ArrowRight } from "lucide-react";
+import { Plus, Minus, Heart, ChevronDown, Star, MessageSquare, Upload } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useCartDrawer } from "../context/CartDrawerContext";
@@ -180,7 +180,6 @@ function ProductDetails() {
   const [reviewPhone, setReviewPhone] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
-  const [reviewImage, setReviewImage] = useState(null);
   const [reviewImagePreview, setReviewImagePreview] = useState(null);
   const [formSuccess, setFormSuccess] = useState(false);
   const [formErrors, setFormErrors] = useState({});
@@ -311,7 +310,6 @@ Product Code: ${sku}`
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setReviewImage(file);
       setReviewImagePreview(URL.createObjectURL(file));
     }
   };
@@ -349,7 +347,6 @@ Product Code: ${sku}`
     setReviewPhone("");
     setReviewRating(5);
     setReviewComment("");
-    setReviewImage(null);
     setReviewImagePreview(null);
     setFormErrors({});
 
@@ -997,7 +994,6 @@ Product Code: ${sku}`
                         <button
                           type="button"
                           onClick={() => {
-                            setReviewImage(null);
                             setReviewImagePreview(null);
                           }}
                           className="absolute top-0.5 right-0.5 bg-black/80 text-white w-4.5 h-4.5 rounded-full flex items-center justify-center text-[7px]"
