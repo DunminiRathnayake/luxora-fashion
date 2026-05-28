@@ -1,8 +1,19 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 function Hero() {
+  // Active background index state for slow slideshow crossfade
+  const [activeBg, setActiveBg] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveBg((prev) => (prev === 0 ? 1 : 0));
+    }, 6000); // Crossfade every 6 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   // 1. Mouse coordinates for parallax movement
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -56,15 +67,26 @@ function Hero() {
         </svg>
       </div>
 
-      {/* Background Image Layer (Luxury Clothing Shop) */}
+      {/* Background Image Layer (Luxury Clothing Shop Slideshow) */}
       <motion.div
         style={{ x: bgX, y: bgY }}
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-neutral-950"
       >
-        <img
+        {/* Image 1 */}
+        <motion.img
+          animate={{ opacity: activeBg === 0 ? 0.22 : 0 }}
+          transition={{ duration: 2.2, ease: "easeInOut" }}
           src={getOptimizedImageUrl("https://images.unsplash.com/photo-1441986300917-64674bd600d8", 1600)}
-          alt="Luxury atelier clothing boutique interior"
-          className="w-full h-full object-cover opacity-25 mix-blend-luminosity scale-105 filter blur-[1px]"
+          alt="Luxury boutique interior 1"
+          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity scale-105 filter blur-[1px]"
+        />
+        {/* Image 2 */}
+        <motion.img
+          animate={{ opacity: activeBg === 1 ? 0.22 : 0 }}
+          transition={{ duration: 2.2, ease: "easeInOut" }}
+          src={getOptimizedImageUrl("https://images.unsplash.com/photo-1558769132-cb1aea458c5e", 1600)}
+          alt="Luxury boutique interior 2"
+          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity scale-105 filter blur-[1px]"
         />
         {/* Soft radial overlay spotlight combined on top of boutique */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(242,240,234,0.15)_0%,_rgba(10,10,10,0.6)_80%)]" />
