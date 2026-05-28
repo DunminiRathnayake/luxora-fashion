@@ -161,14 +161,48 @@ function Hero() {
         className="absolute inset-0 flex flex-col items-center justify-end pb-16 md:pb-24 z-30 pointer-events-none"
       >
         <div className="flex flex-col items-center max-w-2xl px-6 text-center select-none">
-          <motion.img
+          <motion.svg
             initial={{ opacity: 0, y: 15, scale: 0.9 }}
             animate={{ opacity: 0.95, y: 0, scale: 1 }}
             transition={{ duration: 1.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            src="/luxora_logo.png"
-            alt="Luxora Monogram Logo"
-            className="w-16 h-16 sm:w-20 sm:h-20 object-contain mb-6 mix-blend-screen filter brightness-110 pointer-events-none"
-          />
+            className="w-20 h-20 sm:w-24 sm:h-24 text-white mb-6 pointer-events-none"
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Outer thin ring */}
+            <circle cx="50" cy="50" r="44" stroke="currentColor" strokeWidth="1" strokeOpacity="0.25" />
+            {/* Inner dotted/fine ring */}
+            <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.15" strokeDasharray="2 2" />
+            {/* Elegant Serif Monogram 'L' */}
+            <text
+              x="50"
+              y="58"
+              fontFamily="var(--font-serif)"
+              fontSize="34"
+              fontWeight="300"
+              fill="currentColor"
+              textAnchor="middle"
+              className="font-serif"
+            >
+              L
+            </text>
+            {/* Sub-label inside emblem */}
+            <text
+              x="50"
+              y="74"
+              fontFamily="var(--font-sans)"
+              fontSize="5.5"
+              fontWeight="300"
+              letterSpacing="0.45em"
+              fill="currentColor"
+              fillOpacity="0.6"
+              textAnchor="middle"
+              className="font-sans uppercase"
+            >
+              Atelier
+            </text>
+          </motion.svg>
 
           <motion.p
             initial={{ opacity: 0, y: 15 }}
