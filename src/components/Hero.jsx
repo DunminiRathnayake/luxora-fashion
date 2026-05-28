@@ -98,11 +98,69 @@ function Hero() {
       {/* Main Content Layout Container */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center justify-center h-full">
         
-        {/* Giant Centered Masked Logo (Parallax Layer) */}
+        {/* Giant Centered Masked Logo & Monogram (Parallax Layer) */}
         <motion.div
           style={{ x: logoX, y: logoY }}
-          className="w-full flex justify-center mb-8 relative"
+          className="w-full flex flex-col items-center justify-center mb-8 relative"
         >
+          {/* Interlocking L & X Vector Monogram Crest */}
+          <motion.div
+            initial={{ opacity: 0, y: -15, rotate: -15 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ duration: 2.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-5 relative z-10 select-none pointer-events-none"
+          >
+            <svg
+              viewBox="0 0 100 100"
+              className="w-16 h-16 md:w-20 md:h-20 text-neutral-100/90 drop-shadow-[0_0_12px_rgba(255,255,255,0.18)]"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Outer Minimalist Diamond */}
+              <polygon
+                points="50,5 95,50 50,95 5,50"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              {/* Inner Diamond (concentric, thin border) */}
+              <polygon
+                points="50,11 89,50 50,89 11,50"
+                stroke="currentColor"
+                strokeWidth="0.5"
+                strokeOpacity="0.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              {/* Interlocking L and X Letters */}
+              <text
+                x="44"
+                y="57"
+                fontFamily="'Cormorant Garamond', serif"
+                fontSize="27"
+                fontWeight="300"
+                textAnchor="middle"
+                fill="currentColor"
+                letterSpacing="0"
+              >
+                L
+              </text>
+              <text
+                x="56"
+                y="63"
+                fontFamily="'Cormorant Garamond', serif"
+                fontSize="27"
+                fontWeight="300"
+                textAnchor="middle"
+                fill="currentColor"
+                letterSpacing="0"
+              >
+                X
+              </text>
+            </svg>
+          </motion.div>
+
           <motion.h1
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
