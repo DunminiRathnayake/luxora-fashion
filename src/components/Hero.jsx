@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { getOptimizedImageUrl } from "../utils/imageOptimizer";
 
 function Hero() {
   // 1. Mouse coordinates for parallax movement
@@ -55,11 +56,19 @@ function Hero() {
         </svg>
       </div>
 
-      {/* Radial soft spotlight glow behind the logo (moving slightly to emphasize space) */}
+      {/* Background Image Layer (Luxury Clothing Shop) */}
       <motion.div
         style={{ x: bgX, y: bgY }}
-        className="absolute w-[600px] h-[600px] bg-neutral-100/10 rounded-full blur-[140px] pointer-events-none z-0"
-      />
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-neutral-950"
+      >
+        <img
+          src={getOptimizedImageUrl("https://images.unsplash.com/photo-1441986300917-64674bd600d8", 1600)}
+          alt="Luxury atelier clothing boutique interior"
+          className="w-full h-full object-cover opacity-25 mix-blend-luminosity scale-105 filter blur-[1px]"
+        />
+        {/* Soft radial overlay spotlight combined on top of boutique */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(242,240,234,0.15)_0%,_rgba(10,10,10,0.6)_80%)]" />
+      </motion.div>
 
       {/* Solid black vignette depth gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/30 z-0 pointer-events-none" />
