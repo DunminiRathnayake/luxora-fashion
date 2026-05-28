@@ -161,6 +161,15 @@ function Hero() {
         className="absolute inset-0 flex flex-col items-center justify-end pb-16 md:pb-24 z-30 pointer-events-none"
       >
         <div className="flex flex-col items-center max-w-2xl px-6 text-center select-none">
+          <motion.img
+            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            animate={{ opacity: 0.95, y: 0, scale: 1 }}
+            transition={{ duration: 1.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            src="/luxora_logo.png"
+            alt="Luxora Monogram Logo"
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain mb-6 mix-blend-screen filter brightness-110 pointer-events-none"
+          />
+
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
