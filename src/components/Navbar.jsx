@@ -72,19 +72,19 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center px-6 md:px-10 py-5 border-b border-neutral-100 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+    <nav className="flex justify-between items-center px-6 md:px-10 py-5 border-b border-neutral-200/40 bg-[#faf9f6]/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
       {/* Brand Logo */}
-      <Link to="/" className="text-2xl font-bold tracking-widest text-black no-underline z-50">
+      <Link to="/" className="text-xl font-serif font-light tracking-[8px] text-black no-underline z-50 hover:opacity-80 transition-opacity">
         LUXORA
       </Link>
 
       {/* Desktop Menu */}
-      <div className="hidden md:flex gap-8 items-center text-xs uppercase tracking-widest font-medium">
+      <div className="hidden md:flex gap-8 items-center text-[10px] uppercase tracking-[3px] font-light">
         <NavLink
           to="/"
           className={({ isActive }) =>
             `relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline ${
-              isActive ? "text-black font-semibold" : ""
+              isActive ? "text-black font-normal" : ""
             }`
           }
         >
@@ -94,7 +94,7 @@ function Navbar() {
               {isActive && (
                 <motion.div
                   layoutId="navUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                  className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )}
@@ -106,7 +106,7 @@ function Navbar() {
           to="/shop"
           className={({ isActive }) =>
             `relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline ${
-              isActive ? "text-black font-semibold" : ""
+              isActive ? "text-black font-normal" : ""
             }`
           }
         >
@@ -116,7 +116,7 @@ function Navbar() {
               {isActive && (
                 <motion.div
                   layoutId="navUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                  className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )}
@@ -130,7 +130,7 @@ function Navbar() {
               to="/profile/orders"
               className={({ isActive }) =>
                 `relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline ${
-                  isActive ? "text-black font-semibold" : ""
+                  isActive ? "text-black font-normal" : ""
                 }`
               }
             >
@@ -140,7 +140,7 @@ function Navbar() {
                   {isActive && (
                     <motion.div
                       layoutId="navUnderline"
-                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                      className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
                       transition={{ type: "spring", stiffness: 350, damping: 30 }}
                     />
                   )}
@@ -149,7 +149,7 @@ function Navbar() {
             </NavLink>
             <button
               onClick={logoutUser}
-              className="relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline cursor-pointer uppercase tracking-widest font-medium bg-transparent border-0 outline-none"
+              className="relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline cursor-pointer uppercase tracking-[3px] font-light bg-transparent border-0 outline-none text-[10px]"
             >
               Logout ({user.name.split(" ")[0]})
             </button>
@@ -158,14 +158,14 @@ function Navbar() {
           <NavLink
             to="/login"
             className={`relative py-2 text-neutral-500 hover:text-black transition-colors duration-300 no-underline ${
-              isAuthActive ? "text-black font-semibold" : ""
+              isAuthActive ? "text-black font-normal" : ""
             }`}
           >
             <span>Login</span>
             {isAuthActive && (
               <motion.div
                 layoutId="navUnderline"
-                className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
                 transition={{ type: "spring", stiffness: 350, damping: 30 }}
               />
             )}
@@ -180,24 +180,24 @@ function Navbar() {
         <NavLink
           to="/wishlist"
           className={({ isActive }) =>
-            `flex items-center gap-1.5 text-neutral-500 hover:text-black transition-colors no-underline relative py-2 text-xs uppercase tracking-widest font-medium ${
-              isActive ? "text-black font-semibold" : ""
+            `flex items-center gap-1.5 text-neutral-500 hover:text-black transition-colors no-underline relative py-2 text-[10px] uppercase tracking-[3px] font-light ${
+              isActive ? "text-black font-normal" : ""
             }`
           }
         >
           {({ isActive }) => (
             <>
-              <Heart className={`w-4 h-4 ${isActive ? "fill-black text-black" : "text-neutral-800"}`} />
+              <Heart className={`w-3.5 h-3.5 ${isActive ? "fill-black text-black" : "text-neutral-800"}`} />
               <span className="hidden sm:inline">Favorites</span>
               {wishlistCount > 0 && (
-                <span className="absolute -top-0.5 -right-2 bg-black text-white text-[8px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border border-white">
+                <span className="absolute -top-0.5 -right-2 bg-black text-white text-[7px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border border-white">
                   {wishlistCount}
                 </span>
               )}
               {isActive && (
                 <motion.div
                   layoutId="navUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+                  className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )}
@@ -211,16 +211,16 @@ function Navbar() {
             e.preventDefault();
             openCart();
           }}
-          className={`flex items-center gap-1.5 text-neutral-500 hover:text-black transition-colors no-underline relative py-2 text-xs uppercase tracking-widest font-medium bg-transparent border-0 outline-none cursor-pointer ${
-            location.pathname === "/cart" ? "text-black font-semibold" : ""
+          className={`flex items-center gap-1.5 text-neutral-500 hover:text-black transition-colors no-underline relative py-2 text-[10px] uppercase tracking-[3px] font-light bg-transparent border-0 outline-none cursor-pointer ${
+            location.pathname === "/cart" ? "text-black font-normal" : ""
           }`}
         >
           <motion.div
-            animate={bounceCartIcon ? { scale: [1, 1.4, 0.9, 1.15, 1] } : { scale: 1 }}
-            transition={{ duration: 0.55 }}
+            animate={bounceCartIcon ? { scale: [1, 1.3, 0.95, 1.1, 1] } : { scale: 1 }}
+            transition={{ duration: 0.5 }}
             className="relative"
           >
-            <ShoppingBag className="w-4 h-4 text-neutral-800" />
+            <ShoppingBag className="w-3.5 h-3.5 text-neutral-800" />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1.5 bg-black text-white text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-white">
                 {cartCount}
@@ -231,7 +231,7 @@ function Navbar() {
           {location.pathname === "/cart" && (
             <motion.div
               layoutId="navUnderline"
-              className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-black"
+              className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
               transition={{ type: "spring", stiffness: 350, damping: 30 }}
             />
           )}
@@ -255,11 +255,11 @@ function Navbar() {
             initial="closed"
             animate="open"
             exit="closed"
-            className="fixed inset-0 w-screen h-screen bg-white/95 backdrop-blur-2xl z-40 flex flex-col justify-center items-center px-8"
+            className="fixed inset-0 w-screen h-screen bg-[#faf9f6]/98 backdrop-blur-2xl z-40 flex flex-col justify-center items-center px-8"
           >
             <motion.div
               variants={navLinksVariants}
-              className="flex flex-col gap-8 text-center text-2xl tracking-[6px] uppercase font-light text-neutral-800"
+              className="flex flex-col gap-8 text-center text-xl tracking-[6px] uppercase font-light text-neutral-800"
             >
               <motion.div variants={linkItemVariants}>
                 <Link

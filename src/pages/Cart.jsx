@@ -130,12 +130,12 @@ Please confirm availability and delivery details.`;
   // Step 1: Login Required Screen
   if (step === "login_required") {
     return (
-      <div className="min-h-[75vh] flex flex-col items-center justify-center px-6 text-center bg-white">
+      <div className="min-h-[75vh] flex flex-col items-center justify-center px-6 text-center bg-[#faf9f6]">
         <SEO title="Secure Checkout - Login Required" description="Log in to your Luxora account to proceed with your order details." />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-neutral-50 p-8 md:p-12 border border-neutral-150 rounded-sm max-w-md shadow-sm"
+          className="bg-white p-8 md:p-12 border border-neutral-200/50 rounded-xs max-w-md shadow-xs"
         >
           <div className="w-12 h-12 border border-neutral-200 rounded-full flex items-center justify-center mx-auto mb-6 bg-white">
             <Lock className="w-5 h-5 text-neutral-800" />
@@ -177,7 +177,7 @@ Please confirm availability and delivery details.`;
   // Step 2: Checkout Review Section
   if (step === "checkout_review") {
     return (
-      <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+      <div className="min-h-screen bg-[#faf9f6] pb-24 pt-8 md:pt-16">
         <SEO title="Confirm Checkout Details" description="Review your order details and enter your shipping info to confirm on WhatsApp." />
         <div className="max-w-7xl mx-auto px-6 md:px-10">
           
@@ -201,7 +201,7 @@ Please confirm availability and delivery details.`;
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
             {/* Left Side: Delivery Details Form */}
-            <div className="lg:col-span-7 bg-neutral-50 border border-neutral-150 p-6 md:p-8 rounded-sm shadow-sm">
+            <div className="lg:col-span-7 bg-white border border-neutral-200/60 p-6 md:p-8 rounded-xs shadow-xs">
               <h3 className="text-sm font-semibold tracking-widest uppercase text-neutral-900 border-b pb-4 mb-6">
                 Delivery Details
               </h3>
@@ -274,7 +274,7 @@ Please confirm availability and delivery details.`;
             </div>
 
             {/* Right Side: Order Review Summary */}
-            <div className="lg:col-span-5 bg-neutral-50 border border-neutral-150 p-6 md:p-8 rounded-sm shadow-sm">
+            <div className="lg:col-span-5 bg-white border border-neutral-200/60 p-6 md:p-8 rounded-xs shadow-xs">
               <h3 className="text-sm font-semibold tracking-widest uppercase text-neutral-900 border-b pb-4 mb-6">
                 Order Items
               </h3>
@@ -388,7 +388,7 @@ Please confirm availability and delivery details.`;
 
   // Step 3: Standard Cart Page View
   return (
-    <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+    <div className="min-h-screen bg-[#faf9f6] pb-24 pt-8 md:pt-16">
       <SEO title="Shopping Bag" description="View products, customize sizes, or adjust quantities in your luxury Luxora shopping bag." />
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <h1 className="text-2xl md:text-3xl font-light tracking-widest uppercase mb-12 border-b pb-6 border-neutral-100">
@@ -542,7 +542,7 @@ Please confirm availability and delivery details.`;
 
               {/* Order Summary Sidebar */}
               <div className="lg:col-span-4">
-                <div className="bg-neutral-50 border border-neutral-150 p-6 md:p-8 rounded-lg shadow-sm">
+                <div className="bg-white border border-neutral-200/60 p-6 md:p-8 rounded-xs shadow-xs">
                   <h3 className="text-sm font-semibold tracking-widest uppercase text-neutral-900 border-b pb-4 mb-6">
                     Order Summary
                   </h3>

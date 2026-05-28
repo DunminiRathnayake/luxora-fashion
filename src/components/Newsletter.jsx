@@ -73,9 +73,8 @@ function Newsletter() {
               </p>
 
               <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-                <div className="flex flex-col sm:flex-row gap-3 items-stretch relative">
-                  <div className="relative flex-1">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+                <div className="flex flex-col sm:flex-row gap-4 items-stretch relative">
+                  <div className="relative flex-grow">
                     <input
                       type="email"
                       value={email}
@@ -84,15 +83,15 @@ function Newsletter() {
                         if (error) setError("");
                       }}
                       disabled={status === "loading"}
-                      placeholder="Enter your email address"
-                      className="w-full pl-11 pr-4 py-3.5 text-xs text-white bg-neutral-900/60 border border-neutral-800 rounded-full focus:outline-none focus:border-white focus:bg-neutral-900 transition-all duration-300 font-light"
+                      placeholder="ENTER YOUR EMAIL"
+                      className="w-full bg-transparent border-b border-neutral-700 focus:border-white py-3 px-2 text-xs text-white placeholder-neutral-500 focus:outline-none transition-all duration-300 font-light uppercase tracking-widest text-center sm:text-left"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="px-8 py-3.5 bg-white text-black text-[10px] uppercase tracking-widest font-semibold border border-white hover:bg-transparent hover:text-white rounded-full transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="px-8 py-3.5 bg-white text-black text-[10px] uppercase tracking-widest font-semibold border border-white hover:bg-transparent hover:text-white transition-all duration-500 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {status === "loading" ? "Subscribing..." : "Subscribe"}
                     {status === "idle" && <ArrowRight className="w-3 h-3" />}

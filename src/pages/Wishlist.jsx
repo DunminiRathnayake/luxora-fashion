@@ -18,7 +18,7 @@ function Wishlist() {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+    <div className="min-h-screen bg-[#faf9f6] pb-24 pt-8 md:pt-16">
       <SEO title="Saved Favorites" description="Review your saved favorite luxury fashion pieces on Luxora." />
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         

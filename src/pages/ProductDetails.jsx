@@ -383,7 +383,7 @@ Product Code: ${sku}`
   };
 
   return (
-    <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+    <div className="min-h-screen bg-[#faf9f6] pb-24 pt-8 md:pt-16">
       <SEO 
         title={product.name}
         description={product.description}
@@ -483,9 +483,9 @@ Product Code: ${sku}`
               <span className="text-xl text-neutral-800 font-semibold">{product.price}</span>
               
               {/* Installment payment note UI */}
-              <div className="mt-2.5 p-3 bg-neutral-50 border border-neutral-150 rounded flex items-center justify-between text-[10px] text-neutral-600 font-light tracking-wide">
-                <span className="font-semibold text-black">{getInstallmentAmount(product.price)}</span>
-                
+              <div className="mt-3.5 p-3.5 bg-neutral-50/60 border border-neutral-200/50 rounded-xs flex items-center justify-between text-[10px] text-neutral-600 font-light tracking-wide">
+                <span className="font-sans">Or 3 interest-free payments of <span className="font-semibold text-black">{getInstallmentAmount(product.price)}</span></span>
+                <span className="text-[8px] uppercase tracking-widest font-semibold text-neutral-400 bg-neutral-200/40 px-2 py-0.5 rounded-sm">Koko / Mintpay</span>
               </div>
             </div>
 

@@ -40,7 +40,7 @@ function AppContent() {
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-black font-sans antialiased">
+    <div className="min-h-screen flex flex-col bg-[#faf9f6] text-black font-sans antialiased">
       <ScrollToTop />
       {!isAdminRoute && <Navbar />}
 

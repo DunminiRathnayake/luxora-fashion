@@ -24,61 +24,74 @@ function Shop() {
   });
 
   return (
-    <div className="min-h-screen bg-white pb-20">
+    <div className="min-h-screen bg-[#faf9f6] pb-24">
       <SEO 
         title="Shop The Collection"
         description="Browse the exquisite Luxora fashion collection. Find structured evening dresses, standard luxury blazers, color swatches and standard UK sizes."
       />
+      
       {/* Hero Header */}
-      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-light tracking-widest uppercase mb-4">
+      <div className="max-w-7xl mx-auto px-6 pt-20 pb-12 text-center">
+        <span className="text-[10px] tracking-[8px] uppercase text-neutral-400 font-semibold block mb-3">
+          LUXORA ATELIER
+        </span>
+        <h1 className="text-4xl md:text-5xl font-serif font-light tracking-[4px] uppercase text-neutral-900 mb-4">
           Shop The Collection
         </h1>
-        <p className="text-gray-500 font-light text-sm max-w-md mx-auto">
+        <div className="w-12 h-[1px] bg-neutral-300 mx-auto my-6" />
+        <p className="text-neutral-500 font-light text-xs sm:text-sm max-w-lg mx-auto leading-relaxed tracking-wide">
           Immerse yourself in our signature selection of elegant silhouettes, refined blazers, and luxury evening wear.
         </p>
       </div>
 
       {/* Control Bar: Filters & Search */}
-      <div className="max-w-7xl mx-auto px-6 mb-12">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 mb-16">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-neutral-200/50">
           
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2 md:gap-4 order-2 md:order-1">
+          {/* Category Filter Pills (Sleek Text Tabs) */}
+          <div className="flex flex-wrap gap-x-6 gap-y-3 order-2 md:order-1 items-center">
             {categories.map((category) => {
               const isActive = selectedCategory === category;
               return (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-5 py-2 text-xs uppercase tracking-wider font-medium transition-all duration-300 border rounded-full cursor-pointer ${
+                  className={`relative py-2 text-[11px] uppercase tracking-[3px] transition-all duration-300 cursor-pointer bg-transparent border-0 outline-none ${
                     isActive
-                      ? "bg-black text-white border-black"
-                      : "bg-transparent text-gray-600 border-gray-200 hover:text-black hover:border-black"
+                      ? "text-black font-medium"
+                      : "text-neutral-400 hover:text-black font-light"
                   }`}
                 >
                   {category}
+                  {isActive && (
+                    <motion.div
+                      layoutId="shopCategoryUnderline"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-neutral-950"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
                 </button>
               );
             })}
           </div>
 
-          {/* Search Input Bar */}
+          {/* Search Input Bar (Sleek Rectangle) */}
           <div className="relative w-full md:w-80 order-1 md:order-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 w-3.5 h-3.5" />
             <input
               type="text"
-              placeholder="Search collection..."
+              placeholder="SEARCH CATALOGUE..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:bg-white focus:ring-1 focus:ring-black focus:border-black transition-all duration-300 font-light"
+              className="w-full pl-10 pr-10 py-3 text-[10px] uppercase tracking-widest bg-neutral-50 border border-neutral-200 focus:border-black focus:outline-none transition-all duration-300 font-light rounded-xs"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black transition-colors cursor-pointer bg-transparent border-0 outline-none"
+                aria-label="Clear Search"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
@@ -86,9 +99,9 @@ function Shop() {
         </div>
 
         {/* Results Info */}
-        <div className="flex justify-between items-center mt-6 text-xs text-gray-400 uppercase tracking-widest">
+        <div className="flex justify-between items-center mt-6 text-[10px] text-neutral-400 uppercase tracking-[3px]">
           <span>
-            {selectedCategory} / {filteredProducts.length} {filteredProducts.length === 1 ? "item" : "items"}
+            {selectedCategory} / {filteredProducts.length} {filteredProducts.length === 1 ? "piece" : "pieces"}
           </span>
           {(searchQuery || selectedCategory !== "All") && (
             <button
@@ -96,7 +109,7 @@ function Shop() {
                 setSearchQuery("");
                 setSelectedCategory("All");
               }}
-              className="text-black font-medium hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-neutral-800 font-semibold hover:text-black uppercase tracking-wider transition-colors cursor-pointer bg-transparent border-0 outline-none underline underline-offset-4"
             >
               Clear filters
             </button>
@@ -104,7 +117,7 @@ function Shop() {
         </div>
       </div>
 
-      {/* Product Grid with dynamic state wrapper */}
+      {/* Product Grid */}
       <div className="max-w-7xl mx-auto px-6">
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
@@ -113,7 +126,7 @@ function Shop() {
             ))}
           </div>
         ) : error ? (
-          <div className="py-20 text-center border border-dashed border-neutral-200 rounded-sm max-w-md mx-auto">
+          <div className="py-20 text-center border border-neutral-200 bg-neutral-50 max-w-md mx-auto rounded-sm shadow-xs">
             <span className="text-[10px] tracking-[4px] uppercase text-neutral-400 font-semibold block mb-2">
               Collection Unreachable
             </span>
@@ -122,7 +135,7 @@ function Shop() {
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="bg-black text-white text-[10px] uppercase tracking-widest px-6 py-2.5 hover:bg-neutral-800 transition-colors font-medium cursor-pointer"
+              className="bg-black text-white text-[10px] uppercase tracking-widest px-8 py-3.5 hover:bg-neutral-800 transition-colors font-semibold cursor-pointer border-0 rounded-sm"
             >
               Retry Connection
             </button>
@@ -137,10 +150,10 @@ function Shop() {
                 <motion.div
                   key={product.id}
                   layout
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <ProductCard product={product} />
                 </motion.div>
@@ -151,17 +164,17 @@ function Shop() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="py-20 text-center border border-dashed border-gray-200 rounded-lg max-w-md mx-auto"
+            className="py-20 text-center border border-neutral-200 bg-neutral-50 max-w-md mx-auto rounded-sm shadow-xs"
           >
-            <p className="text-gray-400 font-light mb-4">
-              No pieces match your current selection.
+            <p className="text-neutral-500 font-light text-xs sm:text-sm uppercase tracking-widest mb-6">
+              No pieces match your selection.
             </p>
             <button
               onClick={() => {
                 setSearchQuery("");
                 setSelectedCategory("All");
               }}
-              className="bg-black text-white text-xs uppercase tracking-wider px-6 py-2.5 hover:bg-neutral-800 transition-colors cursor-pointer"
+              className="bg-black text-white text-[10px] uppercase tracking-widest px-8 py-3.5 hover:bg-neutral-800 transition-all cursor-pointer rounded-sm"
             >
               Show All Products
             </button>

@@ -1,1 +1,106 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+  
+  /* Curated luxury warm neutrals / cream / soft dark palette */
+  --color-neutral-50: #fbfbf9;
+  --color-neutral-100: #faf9f6;
+  --color-neutral-150: #f2f0ea;
+  --color-neutral-200: #e8e6dc;
+  --color-neutral-250: #dfdcd0;
+  --color-neutral-300: #cfcaba;
+  --color-neutral-400: #a6a08f;
+  --color-neutral-500: #857e6c;
+  --color-neutral-600: #696252;
+  --color-neutral-750: #3b372f;
+  --color-neutral-850: #1b1915;
+  --color-neutral-900: #12100e;
+  --color-neutral-950: #080706;
+  
+  /* Animation timings */
+  --animate-editorial-fade: editorial-fade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes editorial-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Global Styles */
+body {
+  background-color: #faf9f6; /* Premium soft neutral background */
+  color: #12100e;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Elegant Headings using Cormorant Garamond */
+h1, h2, h3, h4, h5, h6, .editorial-heading {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+/* Custom Premium Selection Fills */
+::selection {
+  background-color: #12100e;
+  color: #faf9f6;
+}
+
+/* Scrollbar behaviors */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #faf9f6;
+}
+::-webkit-scrollbar-thumb {
+  background: #dfdcd0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a6a08f;
+}
+
+/* Utility details */
+.glass-panel {
+  background: rgba(250, 249, 246, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(18, 16, 14, 0.05);
+}
+
+.dark-glass-panel {
+  background: rgba(18, 16, 14, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(250, 249, 246, 0.1);
+}
+
+/* Custom Focus outline styles */
+*:focus-visible {
+  outline: 1.5px solid #12100e;
+  outline-offset: 3px;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #12100e !important;
+  box-shadow: 0 1px 0 rgba(18, 16, 14, 0.05) !important;
+}
+
+/* Chrome DevTools scrollbar-none utilities */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -2,58 +2,57 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-[#f7f3ee] px-10 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer className="bg-[#faf9f6] border-t border-neutral-200/50 px-6 md:px-10 py-20">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-16">
         <div>
-          <h2 className="text-3xl font-bold tracking-widest mb-4">
+          <h2 className="text-xl font-serif font-light tracking-[6px] text-black mb-5">
             LUXORA
           </h2>
-          <p className="text-gray-600 leading-7">
-            A modern fashion destination for timeless elegance,
-            curated collections, and effortless style.
+          <p className="text-neutral-500 font-light text-xs leading-relaxed max-w-xs">
+            A modern fashion destination for timeless elegance, curated capsules, and the editorial lifestyle.
           </p>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-4 uppercase text-sm">
+          <h3 className="text-[10px] tracking-[3px] font-semibold text-neutral-800 uppercase mb-5">
             Shop
           </h3>
-          <ul className="space-y-3 text-gray-600">
-            <li><Link to="/shop">New Arrivals</Link></li>
-            <li><Link to="/shop">Dresses</Link></li>
-            <li><Link to="/shop">Tops</Link></li>
-            <li><Link to="/shop">Collections</Link></li>
+          <ul className="space-y-3.5 text-xs font-light text-neutral-500 list-none p-0">
+            <li><Link to="/shop" className="no-underline hover:text-black hover:underline underline-offset-4 transition-all">New Arrivals</Link></li>
+            <li><Link to="/shop?category=Dresses" className="no-underline hover:text-black hover:underline underline-offset-4 transition-all">Dresses</Link></li>
+            <li><Link to="/shop?category=Tops" className="no-underline hover:text-black hover:underline underline-offset-4 transition-all">Essentials</Link></li>
+            <li><Link to="/shop?category=Evening%20Wear" className="no-underline hover:text-black hover:underline underline-offset-4 transition-all">Evening Wear</Link></li>
           </ul>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-4 uppercase text-sm">
+          <h3 className="text-[10px] tracking-[3px] font-semibold text-neutral-800 uppercase mb-5">
             Support
           </h3>
-          <ul className="space-y-3 text-gray-600">
-            <li>Contact Us</li>
-            <li>Shipping Info</li>
-            <li>Returns & Exchanges</li>
-            <li>Size Guide</li>
+          <ul className="space-y-3.5 text-xs font-light text-neutral-500 list-none p-0">
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">Contact Us</li>
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">Shipping Info</li>
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">Returns & Exchanges</li>
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">Size Guide</li>
           </ul>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-4 uppercase text-sm">
+          <h3 className="text-[10px] tracking-[3px] font-semibold text-neutral-800 uppercase mb-5">
             Connect
           </h3>
-          <ul className="space-y-3 text-gray-600">
-            <li>Instagram</li>
-            <li>TikTok</li>
-            <li>WhatsApp</li>
-            <li>Email</li>
+          <ul className="space-y-3.5 text-xs font-light text-neutral-500 list-none p-0">
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">Instagram</li>
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">TikTok</li>
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">WhatsApp Business</li>
+            <li className="cursor-pointer hover:text-black hover:underline underline-offset-4 transition-all">Concierge Desk</li>
           </ul>
         </div>
       </div>
 
-      <div className="border-t border-gray-300 mt-12 pt-6 text-sm text-gray-500 flex flex-col md:flex-row justify-between">
+      <div className="max-w-7xl mx-auto border-t border-neutral-200/50 mt-16 pt-8 text-[10px] text-neutral-400 uppercase tracking-widest flex flex-col md:flex-row justify-between gap-4">
         <p>© 2026 Luxora Fashion. All rights reserved.</p>
-        <p>Designed with elegance.</p>
+        <p>Curated with quiet luxury.</p>
       </div>
     </footer>
   );

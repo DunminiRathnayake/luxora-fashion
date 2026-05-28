@@ -166,7 +166,7 @@ function ProfileOrders() {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-24 pt-8 md:pt-16">
+    <div className="min-h-screen bg-[#faf9f6] pb-24 pt-8 md:pt-16">
       <SEO title="Your Orders" description="Track your order fulfillment, view delivery status, and review details of your luxury purchases." />
       <div className="max-w-4xl mx-auto px-6 md:px-10">
         

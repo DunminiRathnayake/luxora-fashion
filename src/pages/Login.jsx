@@ -64,7 +64,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-[85vh] flex flex-col lg:grid lg:grid-cols-12 bg-white">
+    <div className="min-h-[85vh] flex flex-col lg:grid lg:grid-cols-12 bg-[#faf9f6]">
       <SEO title="Sign In" description="Log in to your Luxora account to view order history and update billing details." />
       {/* Left Panel: Fashion Imagery */}
       <div className="h-60 sm:h-72 lg:h-auto lg:col-span-5 relative bg-neutral-900 overflow-hidden shrink-0">
