@@ -125,11 +125,12 @@ function Hero() {
         >
           {/* Interlocking L & X Vector Monogram Crest */}
           <motion.div
-            initial={{ opacity: 0, y: -15, rotate: -15 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
             whileHover={{ scale: 1.08, rotate: 90 }}
             transition={{ 
-              default: { duration: 2.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+              opacity: { duration: 1.8, delay: 0.1, ease: "easeOut" },
+              y: { duration: 1.8, delay: 0.1, ease: "easeOut" },
               scale: { type: "spring", stiffness: 150, damping: 15 },
               rotate: { type: "spring", stiffness: 100, damping: 12 }
             }}
@@ -141,57 +142,72 @@ function Hero() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Outer Minimalist Diamond */}
-              <polygon
+              {/* Outer Minimalist Diamond (Sketching Entrance) */}
+              <motion.polygon
                 points="50,5 95,50 50,95 5,50"
                 stroke="currentColor"
                 strokeWidth="1.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.8, delay: 0.1, ease: "easeInOut" }}
               />
-              {/* Inner Diamond (concentric, thin border) */}
-              <polygon
+              {/* Inner Diamond (concentric, thin border) (Sketching Entrance) */}
+              <motion.polygon
                 points="50,11 89,50 50,89 11,50"
                 stroke="currentColor"
                 strokeWidth="0.6"
                 strokeOpacity="0.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 0.6 }}
+                transition={{ duration: 1.8, delay: 0.3, ease: "easeInOut" }}
               />
-              {/* Interlocking Monogram L & X (Refined Geometric Paths) */}
-              <path
+              {/* Interlocking Monogram L & X (Refined Geometric Paths with Staggered Sketching Entrance) */}
+              <motion.path
                 d="M 42,32 L 42,63 L 58,63"
                 stroke="currentColor"
                 strokeWidth="1.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.8, delay: 0.5, ease: "easeInOut" }}
               />
-              <path
+              <motion.path
                 d="M 35,35 L 39,39 M 45,45 L 63,63"
                 stroke="currentColor"
                 strokeWidth="1.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.8, delay: 0.7, ease: "easeInOut" }}
               />
-              <path
+              <motion.path
                 d="M 63,35 L 35,63"
                 stroke="currentColor"
                 strokeWidth="1.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.8, delay: 0.9, ease: "easeInOut" }}
               />
             </svg>
           </motion.div>
           <motion.h1
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ letterSpacing: "0.27em" }}
+            initial={{ opacity: 0, scale: 0.98, letterSpacing: "0.35em" }}
+            animate={{ opacity: 1, scale: 1, letterSpacing: "0.20em" }}
+            whileHover={{ letterSpacing: "0.27em", transition: { duration: 0.8, ease: "easeOut" } }}
             transition={{ 
               opacity: { duration: 2.2, ease: [0.16, 1, 0.3, 1] },
               scale: { duration: 2.2, ease: [0.16, 1, 0.3, 1] },
-              letterSpacing: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+              letterSpacing: { duration: 2.5, ease: [0.16, 1, 0.3, 1] }
             }}
-            className="logo-text-mask text-[10vw] md:text-[6.5vw] tracking-[0.20em] leading-none uppercase text-center font-serif font-extralight select-none pointer-events-auto cursor-default"
+            className="logo-text-mask text-[10vw] md:text-[6.5vw] leading-none uppercase text-center font-serif font-extralight select-none pointer-events-auto cursor-default"
           >
             LUXORA
           </motion.h1>
