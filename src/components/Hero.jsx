@@ -120,7 +120,7 @@ function Hero() {
               <polygon
                 points="50,5 95,50 50,95 5,50"
                 stroke="currentColor"
-                strokeWidth="1"
+                strokeWidth="1.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -128,39 +128,35 @@ function Hero() {
               <polygon
                 points="50,11 89,50 50,89 11,50"
                 stroke="currentColor"
-                strokeWidth="0.5"
-                strokeOpacity="0.5"
+                strokeWidth="0.6"
+                strokeOpacity="0.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              {/* Interlocking L and X Letters */}
-              <text
-                x="44"
-                y="57"
-                fontFamily="'Cormorant Garamond', serif"
-                fontSize="27"
-                fontWeight="300"
-                textAnchor="middle"
-                fill="currentColor"
-                letterSpacing="0"
-              >
-                L
-              </text>
-              <text
-                x="56"
-                y="63"
-                fontFamily="'Cormorant Garamond', serif"
-                fontSize="27"
-                fontWeight="300"
-                textAnchor="middle"
-                fill="currentColor"
-                letterSpacing="0"
-              >
-                X
-              </text>
+              {/* Interlocking Monogram L & X (Refined Geometric Paths) */}
+              <path
+                d="M 42,32 L 42,63 L 58,63"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M 35,35 L 39,39 M 45,45 L 63,63"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M 63,35 L 35,63"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
