@@ -118,10 +118,10 @@ function Hero() {
       {/* Main Content Layout Container */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex-grow flex flex-col items-center justify-center pt-24 pb-8">
         
-        {/* Giant Centered Masked Logo & Monogram (Parallax Layer) */}
+        {/* Centered Masked Logo & Monogram (Parallax Layer - Scaled Down for Elegance) */}
         <motion.div
           style={{ x: logoX, y: logoY }}
-          className="w-full flex flex-col items-center justify-center mb-8 relative"
+          className="w-full flex flex-col items-center justify-center mb-6 relative"
         >
           {/* Interlocking L & X Vector Monogram Crest */}
           <motion.div
@@ -133,11 +133,11 @@ function Hero() {
               scale: { type: "spring", stiffness: 150, damping: 15 },
               rotate: { type: "spring", stiffness: 100, damping: 12 }
             }}
-            className="mb-5 relative z-10 select-none pointer-events-auto cursor-default"
+            className="mb-4 relative z-10 select-none pointer-events-auto cursor-default"
           >
             <svg
               viewBox="0 0 100 100"
-              className="w-16 h-16 md:w-20 md:h-20 text-neutral-100/90 drop-shadow-[0_0_12px_rgba(255,255,255,0.18)]"
+              className="w-10 h-10 md:w-12 md:h-12 text-neutral-100/90 drop-shadow-[0_0_8px_rgba(255,255,255,0.14)]"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -185,13 +185,13 @@ function Hero() {
           <motion.h1
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ letterSpacing: "0.20em" }}
+            whileHover={{ letterSpacing: "0.27em" }}
             transition={{ 
               opacity: { duration: 2.2, ease: [0.16, 1, 0.3, 1] },
               scale: { duration: 2.2, ease: [0.16, 1, 0.3, 1] },
               letterSpacing: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
             }}
-            className="logo-text-mask text-[16vw] md:text-[12.5vw] tracking-[0.16em] leading-none uppercase text-center font-serif font-extralight select-none pointer-events-auto cursor-default"
+            className="logo-text-mask text-[10vw] md:text-[6.5vw] tracking-[0.20em] leading-none uppercase text-center font-serif font-extralight select-none pointer-events-auto cursor-default"
           >
             LUXORA
           </motion.h1>
