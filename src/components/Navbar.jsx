@@ -72,7 +72,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="relative flex justify-between items-center px-6 md:px-10 py-5 border-b border-neutral-200/40 bg-[#faf9f6]/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
+    <nav className="relative flex justify-end items-center px-6 md:px-10 py-5 border-b border-neutral-200/40 bg-[#faf9f6]/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
 
       {/* Desktop Menu (Centered) */}
       <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex gap-8 items-center text-[10px] uppercase tracking-[3px] font-light z-10">
