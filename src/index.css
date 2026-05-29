@@ -158,3 +158,17 @@ input:focus, textarea:focus, select:focus {
     background-size: 120% 120%;
   }
 }
+
+/* Infinite Scrolling Marquee Animation */
+@keyframes infinite-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 35s linear infinite;
+}

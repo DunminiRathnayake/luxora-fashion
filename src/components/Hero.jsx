@@ -18,8 +18,8 @@ function Hero() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // 2. Smooth spring dynamics
-  const springConfig = { damping: 50, stiffness: 200, mass: 0.5 };
+  // 2. Smooth spring dynamics (tuned for luxurious inertia)
+  const springConfig = { damping: 65, stiffness: 120, mass: 0.8 };
   const xSpring = useSpring(mouseX, springConfig);
   const ySpring = useSpring(mouseY, springConfig);
 
@@ -54,7 +54,7 @@ function Hero() {
     <section
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative h-screen w-full overflow-hidden bg-neutral-950 flex flex-col items-center justify-center select-none"
+      className="relative h-screen w-full overflow-hidden bg-neutral-950 flex flex-col justify-between select-none"
       aria-label="Luxora Masked Logo Editorial Hero"
     >
       {/* Cinematic animated repeating grain overlay */}
@@ -67,26 +67,46 @@ function Hero() {
         </svg>
       </div>
 
-      {/* Background Image Layer (Luxury Clothing Shop Slideshow) */}
+      {/* Background Image Layer (Luxury Clothing Shop Slideshow with Ken Burns transitions) */}
       <motion.div
         style={{ x: bgX, y: bgY }}
         className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-neutral-950"
       >
         {/* Image 1 */}
         <motion.img
-          animate={{ opacity: activeBg === 0 ? 0.22 : 0 }}
-          transition={{ duration: 2.2, ease: "easeInOut" }}
+          animate={{ 
+            opacity: activeBg === 0 ? 0.22 : 0,
+            scale: activeBg === 0 ? 1.10 : 1.02,
+            x: activeBg === 0 ? -12 : 0,
+            y: activeBg === 0 ? -8 : 0
+          }}
+          transition={{ 
+            opacity: { duration: 2.5, ease: "easeInOut" },
+            scale: { duration: 6.0, ease: "easeOut" },
+            x: { duration: 6.0, ease: "easeOut" },
+            y: { duration: 6.0, ease: "easeOut" }
+          }}
           src={getOptimizedImageUrl("https://images.unsplash.com/photo-1441986300917-64674bd600d8", 1600)}
           alt="Luxury boutique interior 1"
-          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity scale-105 filter blur-[1px]"
+          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity filter blur-[1px]"
         />
         {/* Image 2 */}
         <motion.img
-          animate={{ opacity: activeBg === 1 ? 0.22 : 0 }}
-          transition={{ duration: 2.2, ease: "easeInOut" }}
+          animate={{ 
+            opacity: activeBg === 1 ? 0.22 : 0,
+            scale: activeBg === 1 ? 1.10 : 1.02,
+            x: activeBg === 1 ? 12 : 0,
+            y: activeBg === 1 ? 8 : 0
+          }}
+          transition={{ 
+            opacity: { duration: 2.5, ease: "easeInOut" },
+            scale: { duration: 6.0, ease: "easeOut" },
+            x: { duration: 6.0, ease: "easeOut" },
+            y: { duration: 6.0, ease: "easeOut" }
+          }}
           src={getOptimizedImageUrl("https://images.unsplash.com/photo-1558769132-cb1aea458c5e", 1600)}
           alt="Luxury boutique interior 2"
-          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity scale-105 filter blur-[1px]"
+          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity filter blur-[1px]"
         />
         {/* Soft radial overlay spotlight combined on top of boutique */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(242,240,234,0.15)_0%,_rgba(10,10,10,0.6)_80%)]" />
@@ -96,7 +116,7 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/30 z-0 pointer-events-none" />
 
       {/* Main Content Layout Container */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center justify-center h-full">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex-grow flex flex-col items-center justify-center pt-24 pb-8">
         
         {/* Giant Centered Masked Logo & Monogram (Parallax Layer) */}
         <motion.div
@@ -107,8 +127,13 @@ function Hero() {
           <motion.div
             initial={{ opacity: 0, y: -15, rotate: -15 }}
             animate={{ opacity: 1, y: 0, rotate: 0 }}
-            transition={{ duration: 2.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-5 relative z-10 select-none pointer-events-none"
+            whileHover={{ scale: 1.08, rotate: 90 }}
+            transition={{ 
+              default: { duration: 2.0, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+              scale: { type: "spring", stiffness: 150, damping: 15 },
+              rotate: { type: "spring", stiffness: 100, damping: 12 }
+            }}
+            className="mb-5 relative z-10 select-none pointer-events-auto cursor-default"
           >
             <svg
               viewBox="0 0 100 100"
@@ -160,8 +185,13 @@ function Hero() {
           <motion.h1
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
-            className="logo-text-mask text-[16vw] md:text-[12.5vw] tracking-[0.16em] leading-none uppercase text-center font-serif font-extralight select-none pointer-events-none"
+            whileHover={{ letterSpacing: "0.20em" }}
+            transition={{ 
+              opacity: { duration: 2.2, ease: [0.16, 1, 0.3, 1] },
+              scale: { duration: 2.2, ease: [0.16, 1, 0.3, 1] },
+              letterSpacing: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+            }}
+            className="logo-text-mask text-[16vw] md:text-[12.5vw] tracking-[0.16em] leading-none uppercase text-center font-serif font-extralight select-none pointer-events-auto cursor-default"
           >
             LUXORA
           </motion.h1>
@@ -170,7 +200,7 @@ function Hero() {
         {/* Foreground Content Stack (Parallax Layer) */}
         <motion.div
           style={{ x: textX, y: textY }}
-          className="flex flex-col items-center text-center pointer-events-none max-w-xl"
+          className="flex flex-col items-center text-center pointer-events-none max-w-2xl"
         >
           {/* Subtitle */}
           <div className="overflow-hidden mb-4">
@@ -184,27 +214,63 @@ function Hero() {
             </motion.h2>
           </div>
 
-          {/* Description */}
+          {/* Description (Wider and more elegant like Kado) */}
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-md text-neutral-400 font-light text-[11px] sm:text-xs leading-relaxed tracking-wider mb-8"
+            className="max-w-xl text-neutral-300 font-light text-xs sm:text-sm md:text-base leading-relaxed tracking-wide mb-8 opacity-90 mx-auto"
           >
             Curated statement apparel designed for quiet luxury, enduring quality, and the modern editorial lifestyle.
           </motion.p>
+
+          {/* Luxury Brand Feature Highlight Pills (Inspired by Kado) */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.4, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center mb-10 w-full"
+          >
+            {[
+              "Worldwide Shipping",
+              "Bespoke Tailoring",
+              "Ethically Crafted"
+            ].map((text, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-2.5 text-neutral-200 border border-white/5 bg-white/5 backdrop-blur-md rounded-full py-2 px-5 text-[10px] sm:text-xs tracking-wider font-light"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#cfcaba"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="shrink-0"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                {text}
+              </div>
+            ))}
+          </motion.div>
 
           {/* Interactive CTAs with spring hover translation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.2, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="flex gap-4 flex-wrap justify-center pointer-events-auto"
           >
             <motion.div
-              whileHover={{ y: -3, scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
             >
               <Link
                 to="/shop"
@@ -215,9 +281,9 @@ function Hero() {
             </motion.div>
 
             <motion.div
-              whileHover={{ y: -3, scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
             >
               <Link
                 to="/shop?featured=true"
@@ -232,23 +298,34 @@ function Hero() {
 
       </div>
 
-      {/* Floating Accent side labels */}
+      {/* Floating Accent side labels (Shifted higher to prevent marquee overlap) */}
       <motion.div
         style={{ x: labelX, y: labelY }}
-        className="absolute left-8 bottom-12 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light origin-left rotate-270 -translate-x-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5 }}
+        transition={{ duration: 1.8, delay: 1.0, ease: "easeOut" }}
+        className="absolute left-8 bottom-36 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light origin-left rotate-270 -translate-x-full"
       >
         New Season 2026
       </motion.div>
 
       <motion.div
         style={{ x: labelX, y: labelY }}
-        className="absolute right-8 bottom-12 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5 }}
+        transition={{ duration: 1.8, delay: 1.0, ease: "easeOut" }}
+        className="absolute right-8 bottom-36 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light"
       >
         Luxury Edit
       </motion.div>
 
-      {/* Animated Scroll Down Indicator */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-25 pointer-events-none">
+      {/* Animated Scroll Down Indicator (Shifted higher to prevent marquee overlap) */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.6, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-25 pointer-events-none"
+      >
         <div className="w-[12px] h-[22px] border border-neutral-700 rounded-full flex justify-center p-0.5">
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -256,7 +333,76 @@ function Hero() {
             className="w-0.5 h-0.5 bg-neutral-400 rounded-full"
           />
         </div>
-      </div>
+      </motion.div>
+
+      {/* Editorial Partner Marquee (Inspired by Kado) */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.8, delay: 1.4 }}
+        className="w-full pt-8 pb-6 mt-auto relative overflow-hidden z-20 border-t border-white/5 bg-gradient-to-r from-transparent via-neutral-950/80 to-transparent backdrop-blur-sm"
+      >
+        {/* Small Section Header */}
+        <div className="text-center mb-4 relative z-20">
+          <span className="text-[8px] md:text-[9px] uppercase tracking-[0.4em] text-neutral-400 font-medium opacity-85">
+            As Featured In
+          </span>
+        </div>
+
+        {/* Fading Edge Masks */}
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+
+        {/* Infinite scrolling marquee flex container */}
+        <div className="flex w-max animate-infinite-scroll items-center relative z-0">
+          {/* Set 1 */}
+          <div className="flex items-center shrink-0">
+            {/* Vogue */}
+            <svg viewBox="0 0 100 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="18" fontWeight="600" textAnchor="middle" letterSpacing="6">VOGUE</text>
+            </svg>
+            {/* GQ */}
+            <svg viewBox="0 0 50 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="sans-serif" fontSize="20" fontWeight="900" textAnchor="middle" letterSpacing="0">GQ</text>
+            </svg>
+            {/* ELLE */}
+            <svg viewBox="0 0 80 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="sans-serif" fontSize="18" fontWeight="400" textAnchor="middle" letterSpacing="8">ELLE</text>
+            </svg>
+            {/* Bazaar */}
+            <svg viewBox="0 0 120 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="15" fontWeight="500" textAnchor="middle" letterSpacing="4">BAZAAR</text>
+            </svg>
+            {/* Vanity Fair */}
+            <svg viewBox="0 0 160 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="13" fontWeight="400" textAnchor="middle" letterSpacing="3">VANITY FAIR</text>
+            </svg>
+          </div>
+          {/* Set 2 (Identical duplicate for infinite scroll seamless loop) */}
+          <div className="flex items-center shrink-0">
+            {/* Vogue */}
+            <svg viewBox="0 0 100 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="18" fontWeight="600" textAnchor="middle" letterSpacing="6">VOGUE</text>
+            </svg>
+            {/* GQ */}
+            <svg viewBox="0 0 50 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="sans-serif" fontSize="20" fontWeight="900" textAnchor="middle" letterSpacing="0">GQ</text>
+            </svg>
+            {/* ELLE */}
+            <svg viewBox="0 0 80 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="sans-serif" fontSize="18" fontWeight="400" textAnchor="middle" letterSpacing="8">ELLE</text>
+            </svg>
+            {/* Bazaar */}
+            <svg viewBox="0 0 120 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="15" fontWeight="500" textAnchor="middle" letterSpacing="4">BAZAAR</text>
+            </svg>
+            {/* Vanity Fair */}
+            <svg viewBox="0 0 160 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
+              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="13" fontWeight="400" textAnchor="middle" letterSpacing="3">VANITY FAIR</text>
+            </svg>
+          </div>
+        </div>
+      </motion.div>
 
     </section>
   );
