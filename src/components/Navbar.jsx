@@ -73,10 +73,6 @@ function Navbar() {
 
   return (
     <nav className="flex justify-between items-center px-6 md:px-10 py-5 border-b border-neutral-200/40 bg-[#faf9f6]/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
-      {/* Brand Logo */}
-      <Link to="/" className="text-xl font-serif font-light tracking-[8px] text-black no-underline z-50 hover:opacity-80 transition-opacity">
-        LUXORA
-      </Link>
 
       {/* Desktop Menu */}
       <div className="hidden md:flex gap-8 items-center text-[10px] uppercase tracking-[3px] font-light">
