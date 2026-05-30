@@ -33,6 +33,31 @@ function Navbar() {
     setIsMenuOpen(false);
   }, [location.pathname]);
 
+  // Scroll dependent logo state
+  const isHomePage = location.pathname === "/";
+  const [showLogo, setShowLogo] = useState(!isHomePage);
+
+  useEffect(() => {
+    if (!isHomePage) {
+      setShowLogo(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      // Fade logo in when scrolled past the hero section (100vh minus navbar height)
+      if (window.scrollY > window.innerHeight - 90) {
+        setShowLogo(true);
+      } else {
+        setShowLogo(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Trigger initial check
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHomePage, location.pathname]);
+
   const menuVariants = {
     closed: {
       opacity: 0,
@@ -73,6 +98,26 @@ function Navbar() {
 
   return (
     <nav className="relative flex justify-end items-center px-6 md:px-10 py-5 border-b border-neutral-200/40 bg-[#faf9f6]/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
+
+      {/* Brand Logo (Scroll-revealed on Home Page, always visible on other pages) */}
+      <AnimatePresence>
+        {showLogo && (
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute left-6 md:left-10 z-50 select-none"
+          >
+            <Link
+              to="/"
+              className="text-xl font-serif font-light tracking-[8px] text-black no-underline hover:opacity-80 transition-opacity"
+            >
+              LUXORA
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Desktop Menu (Centered) */}
       <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex gap-8 items-center text-[10px] uppercase tracking-[3px] font-light z-10">
