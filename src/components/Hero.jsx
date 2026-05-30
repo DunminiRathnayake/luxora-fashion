@@ -14,6 +14,14 @@ function Hero() {
   const [isShopHovered, setIsShopHovered] = useState(false);
   const [isLookbookHovered, setIsLookbookHovered] = useState(false);
 
+  // Auto-cycle campaign images every 6 seconds with automatic timer reset on manual interaction
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCampaignIndex((prev) => (prev + 1) % CAMPAIGN_IMAGES.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [campaignIndex]);
+
   // 1. Mouse coordinates for parallax movement
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
