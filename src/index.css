@@ -159,16 +159,15 @@ input:focus, textarea:focus, select:focus {
   }
 }
 
-/* Infinite Scrolling Marquee Animation */
-@keyframes infinite-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+/* Slowly shifting luxury gradient background animation */
+@keyframes editorial-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.animate-infinite-scroll {
-  animation: infinite-scroll 35s linear infinite;
+.animate-editorial-gradient {
+  background: linear-gradient(135deg, #faf9f6 0%, #f6f4ed 35%, #faf9f6 70%, #f3efe6 100%);
+  background-size: 200% 200%;
+  animation: editorial-gradient 25s ease-in-out infinite;
 }
