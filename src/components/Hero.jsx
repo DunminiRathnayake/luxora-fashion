@@ -299,9 +299,3 @@ function Hero() {
 }
 
 export default Hero;
-
-    </section>
-  );
-}
-
-export default Hero;
