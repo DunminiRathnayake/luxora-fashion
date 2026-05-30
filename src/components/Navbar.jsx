@@ -33,22 +33,22 @@ function Navbar() {
     setIsMenuOpen(false);
   }, [location.pathname]);
 
-  // Scroll dependent logo state
+  // Scroll dependent navbar visibility (hidden inside Hero on homepage, visible elsewhere)
   const isHomePage = location.pathname === "/";
-  const [showLogo, setShowLogo] = useState(!isHomePage);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(!isHomePage);
 
   useEffect(() => {
     if (!isHomePage) {
-      setShowLogo(true);
+      setIsNavbarVisible(true);
       return;
     }
 
     const handleScroll = () => {
-      // Fade logo in when scrolled past the hero section (100vh minus navbar height)
+      // Show navbar only when scrolled past the hero section (100vh minus offset)
       if (window.scrollY > window.innerHeight - 90) {
-        setShowLogo(true);
+        setIsNavbarVisible(true);
       } else {
-        setShowLogo(false);
+        setIsNavbarVisible(false);
       }
     };
 
@@ -97,27 +97,24 @@ function Navbar() {
   };
 
   return (
-    <nav className="relative flex justify-end items-center px-6 md:px-10 py-5 border-b border-neutral-200/40 bg-[#faf9f6]/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
+    <motion.nav
+      initial={{ y: isHomePage ? -100 : 0, opacity: isHomePage ? 0 : 1 }}
+      animate={{ y: isNavbarVisible ? 0 : -100, opacity: isNavbarVisible ? 1 : 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className={`${
+        isHomePage ? "fixed" : "sticky"
+      } top-0 left-0 right-0 z-50 flex justify-end items-center px-6 md:px-10 py-5 border-b border-neutral-200/40 bg-[#faf9f6]/90 backdrop-blur-md transition-all duration-300`}
+    >
 
-      {/* Brand Logo (Scroll-revealed on Home Page, always visible on other pages) */}
-      <AnimatePresence>
-        {showLogo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="absolute left-6 md:left-10 z-50 select-none"
-          >
-            <Link
-              to="/"
-              className="text-xl font-serif font-light tracking-[8px] text-black no-underline hover:opacity-80 transition-opacity"
-            >
-              LUXORA
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Brand Logo */}
+      <div className="absolute left-6 md:left-10 z-50 select-none">
+        <Link
+          to="/"
+          className="text-xl font-serif font-light tracking-[8px] text-black no-underline hover:opacity-80 transition-opacity"
+        >
+          LUXORA
+        </Link>
+      </div>
 
       {/* Desktop Menu (Centered) */}
       <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex gap-8 items-center text-[10px] uppercase tracking-[3px] font-light z-10">
@@ -403,7 +400,7 @@ function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   );
 }
 
