@@ -54,7 +54,7 @@ function Hero() {
     <section
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative h-screen w-full overflow-hidden bg-neutral-950 flex flex-col justify-between select-none"
+      className="relative h-screen w-full overflow-hidden bg-neutral-950 flex flex-col items-center justify-center select-none"
       aria-label="Luxora Masked Logo Editorial Hero"
     >
       {/* Cinematic animated repeating grain overlay */}
@@ -116,7 +116,7 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/30 z-0 pointer-events-none" />
 
       {/* Main Content Layout Container */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex-grow flex flex-col items-center justify-center pt-24 pb-8">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center justify-center pt-24 pb-8 h-full">
         
         {/* Centered Masked Logo & Monogram (Parallax Layer - Scaled Down for Elegance) */}
         <motion.div
@@ -314,13 +314,13 @@ function Hero() {
 
       </div>
 
-      {/* Floating Accent side labels (Shifted higher to prevent marquee overlap) */}
+      {/* Floating Accent side labels */}
       <motion.div
         style={{ x: labelX, y: labelY }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.5 }}
         transition={{ duration: 1.8, delay: 1.0, ease: "easeOut" }}
-        className="absolute left-8 bottom-36 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light origin-left rotate-270 -translate-x-full"
+        className="absolute left-8 bottom-12 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light origin-left rotate-270 -translate-x-full"
       >
         New Season 2026
       </motion.div>
@@ -330,17 +330,17 @@ function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.5 }}
         transition={{ duration: 1.8, delay: 1.0, ease: "easeOut" }}
-        className="absolute right-8 bottom-36 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light"
+        className="absolute right-8 bottom-12 hidden lg:block z-20 text-[9px] uppercase tracking-[6px] text-neutral-500 font-light"
       >
         Luxury Edit
       </motion.div>
 
-      {/* Animated Scroll Down Indicator (Shifted higher to prevent marquee overlap) */}
+      {/* Animated Scroll Down Indicator */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.6, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-25 pointer-events-none"
+        className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-25 pointer-events-none"
       >
         <div className="w-[12px] h-[22px] border border-neutral-700 rounded-full flex justify-center p-0.5">
           <motion.div
@@ -348,75 +348,6 @@ function Hero() {
             transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
             className="w-0.5 h-0.5 bg-neutral-400 rounded-full"
           />
-        </div>
-      </motion.div>
-
-      {/* Editorial Partner Marquee (Inspired by Kado) */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.8, delay: 1.4 }}
-        className="w-full pt-8 pb-6 mt-auto relative overflow-hidden z-20 border-t border-white/5 bg-gradient-to-r from-transparent via-neutral-950/80 to-transparent backdrop-blur-sm"
-      >
-        {/* Small Section Header */}
-        <div className="text-center mb-4 relative z-20">
-          <span className="text-[8px] md:text-[9px] uppercase tracking-[0.4em] text-neutral-400 font-medium opacity-85">
-            As Featured In
-          </span>
-        </div>
-
-        {/* Fading Edge Masks */}
-        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
-
-        {/* Infinite scrolling marquee flex container */}
-        <div className="flex w-max animate-infinite-scroll items-center relative z-0">
-          {/* Set 1 */}
-          <div className="flex items-center shrink-0">
-            {/* Vogue */}
-            <svg viewBox="0 0 100 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="18" fontWeight="600" textAnchor="middle" letterSpacing="6">VOGUE</text>
-            </svg>
-            {/* GQ */}
-            <svg viewBox="0 0 50 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="sans-serif" fontSize="20" fontWeight="900" textAnchor="middle" letterSpacing="0">GQ</text>
-            </svg>
-            {/* ELLE */}
-            <svg viewBox="0 0 80 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="sans-serif" fontSize="18" fontWeight="400" textAnchor="middle" letterSpacing="8">ELLE</text>
-            </svg>
-            {/* Bazaar */}
-            <svg viewBox="0 0 120 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="15" fontWeight="500" textAnchor="middle" letterSpacing="4">BAZAAR</text>
-            </svg>
-            {/* Vanity Fair */}
-            <svg viewBox="0 0 160 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="13" fontWeight="400" textAnchor="middle" letterSpacing="3">VANITY FAIR</text>
-            </svg>
-          </div>
-          {/* Set 2 (Identical duplicate for infinite scroll seamless loop) */}
-          <div className="flex items-center shrink-0">
-            {/* Vogue */}
-            <svg viewBox="0 0 100 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="18" fontWeight="600" textAnchor="middle" letterSpacing="6">VOGUE</text>
-            </svg>
-            {/* GQ */}
-            <svg viewBox="0 0 50 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="sans-serif" fontSize="20" fontWeight="900" textAnchor="middle" letterSpacing="0">GQ</text>
-            </svg>
-            {/* ELLE */}
-            <svg viewBox="0 0 80 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="sans-serif" fontSize="18" fontWeight="400" textAnchor="middle" letterSpacing="8">ELLE</text>
-            </svg>
-            {/* Bazaar */}
-            <svg viewBox="0 0 120 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="15" fontWeight="500" textAnchor="middle" letterSpacing="4">BAZAAR</text>
-            </svg>
-            {/* Vanity Fair */}
-            <svg viewBox="0 0 160 25" className="h-3.5 md:h-4.5 w-auto text-neutral-400 opacity-50 hover:opacity-90 transition-opacity duration-300 mx-8 md:mx-12" fill="currentColor">
-              <text x="50%" y="18" fontFamily="'Cormorant Garamond', serif" fontSize="13" fontWeight="400" textAnchor="middle" letterSpacing="3">VANITY FAIR</text>
-            </svg>
-          </div>
         </div>
       </motion.div>
 
